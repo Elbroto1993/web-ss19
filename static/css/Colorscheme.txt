@@ -1,0 +1,20 @@
+Primäfarben
+Grün #2ECC71
+Gelb #FED330
+Rot #E74C3C
+Blau #34495E
+
+Sekundärfarben
+Grün #27AE60
+Gelb #F7B731
+Rot #C0392B
+Blau #2C3E50
+
+Hintergrundfarbe
+#ECF0F1
+
+Textfarbe
+#FFFFFF
+
+Schriftart
+Roboto

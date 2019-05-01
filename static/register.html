@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="index.html" class="logo">
+        <img src="logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
+      <div class="login">
+        <form class="loginForm">
+          <input
+            type="text"
+            placeholder="Nutzername"
+            id="loginUsername"
+            class="loginInput"
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            id="loginPassword"
+            class="loginInput"
+          />
+          <input
+            type="submit"
+            value="Login"
+            class="btnYellow"
+            id="loginButton"
+          />
+        </form>
+        <a href="register.html" class="registerLink">Registrieren</a>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems">
+            <a href="index.html"
+              ><img
+                src="icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten.html"
+              ><img
+                src="icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Main display -->
+      <div class="mainWindow">
+        <div id="openedBurgerMenu"></div>
+        <h1 class="pageName"><strong>Registrieren</strong></h1>
+        <section class="hero card">
+          <h3>
+            Wir freuen uns, dass du dich bein BrainTrain anmelden möchtest.
+            Bitte beachte, dass
+            <strong>pro E-Mail Adresse nur ein Nutzer</strong> erstellt werden
+            kann und jeder <strong>Nutzername nur einmal vergeben</strong> wird.
+          </h3>
+          <!-- Input zum registrieren -->
+          <div class="registerInputWindow">
+            <form class="registerInputFields">
+              <p>Nutzername</p>
+              <input
+                type="text"
+                size="30"
+                placeholder="maxmustermann"
+                id="registerUsername"
+              />
+              <p id="registerUsernameError"></p>
+              <p>E-Mail</p>
+              <input
+                type="text"
+                size="30"
+                placeholder="muster@example.com"
+                id="registerEmail"
+              />
+              <p id="registerEmailError"></p>
+              <p>Passwort</p>
+              <input type="password" size="30" id="registerPasswordOne" />
+              <p></p>
+              <p>Passwort wiederholen</p>
+              <input type="password" size="30" id="registerPasswordTwo" />
+              <p id="registerPasswoerterError"></p>
+              <p></p>
+              <div class="registerCenter">
+                <input type="checkbox" id="datenschutzCheckbox" /><small
+                  class="datenschutz"
+                >
+                  Ich habe die nicht vorhandene Datenschutzerklärung zur
+                  Kenntnis genommen.
+                </small>
+              </div>
+              <p id="registerCheckboxError"></p>
+              <p></p>
+              <div class="registerCenter">
+                <input
+                  type="submit"
+                  value="Registrieren"
+                  class="btnYellow"
+                  id="registerButton"
+                />
+              </div>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="js/register.js"></script>
+  </body>
+</html>

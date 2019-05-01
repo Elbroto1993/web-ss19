@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="index.html" class="logo">
+        <img src="logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <div class="login" id="loginField">
+        <form class="loginForm">
+          <input
+            type="text"
+            placeholder="Nutzername"
+            id="loginUsername"
+            class="loginInput"
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            id="loginPassword"
+            class="loginInput"
+          />
+          <input
+            type="submit"
+            value="Login"
+            class="btnYellow"
+            id="loginButton"
+          />
+        </form>
+        <a href="register.html" class="registerLink">Registrieren</a>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems">
+            <a href="index.html"
+              ><img
+                src="icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten.html"
+              ><img
+                src="icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Main display -->
+      <div class="mainWindow">
+        <h1 class="pageName"><strong>Karteikasten anschauen</strong></h1>
+        <h3>
+          Hier kannst du dir eine beliebige Karte anschauen ohne Sie zu
+          bearbeiten.
+        </h3>
+        <div class="card">
+          <div class="viewFlex">
+            <div>
+              <h5>Name</h5>
+              <h1><strong id="viewName">Geometrie</strong></h1>
+            </div>
+            <div>
+              <h5>Kategorie</h5>
+              <h1>
+                <strong id="viewKategorie"
+                  >Naturwissenschaften > Geometrie</strong
+                >
+              </h1>
+            </div>
+            <div>
+              <h5>Erstellt von</h5>
+              <h1><strong id="viewCreatedBy">Max Mustermann</strong></h1>
+            </div>
+            <div>
+              <h5>Fortschritt</h5>
+              <h1><strong id="viewFortschritt">0 %</strong></h1>
+            </div>
+            <div class="viewPositionHexagonHeader">
+              <div class="hexagon hexagon2">
+                <div class="hexagon-in1"><div class="hexagon-in2"></div></div>
+              </div>
+              <div class="insideHexagon">
+                <p id="viewCountKarten">0</p>
+                <p>Karten</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <section class="flex">
+          <div class="viewCardList">
+            <div class="viewCardListGrid" id="viewListKarten"></div>
+          </div>
+
+          <div class="viewGrid card viewSingleCard" id="viewSingleCard">
+            <div class="viewPositionTitle">Titel</div>
+            <div class="flexNoWrap viewPositionTitle">
+              <div><strong> Titel der Karte</strong></div>
+              <div>
+                <div class="flexNoWrap">
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1 ">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>0</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>1</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>2</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>3</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>4</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>Frage</div>
+            <div>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestias, debitis pariatur quam odit excepturi quod
+              reprehenderit, recusandae earum repellendus, praesentium aliquid
+              perspiciatis? Cumque, accusamus! Vel commodi sapiente voluptatum
+              esse ratione!
+            </div>
+            <div>Antwort</div>
+            <div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
+              quisquam eaque et consectetur dolorum sapiente doloremque rerum
+              magni error culpa delectus odio, excepturi dignissimos ullam
+              repellendus aliquid? Officiis, dignissimos molestias!
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="js/view.js"></script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="index.html" class="logo">
+        <img src="logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <div class="logout">
+        <button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">Max Mustermann</h4>
+          <button class="logoutButton" id="logoutButton">
+            <small>Logout</small>
+          </button>
+        </div>
+        <img
+          src="images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+        />
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList">
+          <li class="menuItems">
+            <a href="index.html"
+              ><img
+                src="icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten.html"
+              ><img
+                src="icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien.html"
+              ><img
+                src="icons/Meine-Karteien.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Meine Karteien<small
+                class="karteiZaehler"
+                id="indexKartenCounterUser"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="profil.html"
+              ><img
+                src="icons/Mein-Profil.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Mein Profil</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Main display -->
+      <div class="mainWindow">
+        <h1 class="pageName"><strong>Lernen</strong></h1>
+        <h3>
+          Hier wird dir zufällig eine Karte aus der gewählten Kartei angezeigt.
+        </h3>
+        <div class="card">
+          <div class="viewFlex">
+            <div>
+              <h5>Name</h5>
+              <h1><strong id="viewName">Geometrie</strong></h1>
+            </div>
+            <div>
+              <h5>Kategorie</h5>
+              <h1>
+                <strong id="viewKategorie"
+                  >Naturwissenschaften > Geometrie</strong
+                >
+              </h1>
+            </div>
+            <div>
+              <h5>Erstellt von</h5>
+              <h1><strong id="viewCreatedBy">Max Mustermann</strong></h1>
+            </div>
+            <div>
+              <h5>Fortschritt</h5>
+              <h1><strong id="viewFortschritt">0 %</strong></h1>
+            </div>
+            <div>
+              <div class="flex">
+                <p>Wiederholung</p>
+                <p>0 1 2 3 4</p>
+              </div>
+              <div class="flex">
+                <p>
+                  Karten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </p>
+                <p>
+                  <strong id="fach0">0 </strong><strong id="fach1">0 </strong
+                  ><strong id="fach2">0 </strong><strong id="fach3">0 </strong
+                  ><strong id="fach4">0 </strong>
+                </p>
+              </div>
+            </div>
+            <div class="viewPositionHexagonHeader">
+              <div class="hexagon hexagon2">
+                <div class="hexagon-in1"><div class="hexagon-in2"></div></div>
+              </div>
+              <div class="insideHexagon">
+                <p id="viewCountKarten">0</p>
+                <p>Karten</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card lernSingleCard" id="lernShowKarte">
+          <div class="viewGrid">
+            <div class="viewPositionTitle">Titel</div>
+            <div class="flexNoWrap viewPositionTitle">
+              <div><strong> Titel der Karte</strong></div>
+              <div>
+                <div class="flexNoWrap">
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>0</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>1</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>2</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>3</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2"></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>4</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>Frage</div>
+            <div>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Molestias, debitis pariatur quam odit excepturi quod
+              reprehenderit, recusandae earum repellendus, praesentium aliquid
+              perspiciatis? Cumque, accusamus! Vel commodi sapiente voluptatum
+              esse ratione!
+            </div>
+            <div>Antwort</div>
+            <div></div>
+          </div>
+          <div class="lernCenterButton">
+            <button class="btnYellow aufdeckenButton">Aufdecken</button>
+          </div>
+          <div class="lernRightButton">
+            <button class="btnYellow">Überspringen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/lern.js"></script>
+  </body>
+</html>

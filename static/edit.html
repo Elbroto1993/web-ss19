@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="index.html" class="logo">
+        <img src="logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <div class="logout">
+        <button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">Max Mustermann</h4>
+          <button class="logoutButton" id="logoutButton">
+            <small>Logout</small>
+          </button>
+        </div>
+        <img
+          src="images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+        />
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList">
+          <li class="menuItems">
+            <a href="index.html"
+              ><img
+                src="icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten.html"
+              ><img
+                src="icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien.html"
+              ><img
+                src="icons/Meine-Karteien.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Meine Karteien<small
+                class="karteiZaehler"
+                id="indexKartenCounterUser"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="profil.html"
+              ><img
+                src="icons/Mein-Profil.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Mein Profil</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Main display -->
+      <div class="mainWindow">
+        <h1 class="pageName">
+          <strong>Karteikasten erstellen / Karteikasten bearbeiten</strong>
+        </h1>
+        <h3>
+          Hier kannst du eine Kartei erstellen oder eine vorhandene nach Bedarf
+          bearbeiten.
+        </h3>
+        <section class="card">
+          <h3 class="insideCardTitle"><strong>Allgemeine Daten</strong></h3>
+          <form class="editInputFields">
+            <!-- Titel Kasten -->
+            <p>Titel</p>
+            <input type="text" size="50" id="editKastenTitel" />
+            <p></p>
+            <!-- Optgroup Kategorie Kasten -->
+            <p>Kategorie</p>
+            <select class="editCategorySelect" id="editKastenSelect">
+              <option selected disabled></option>
+              <optgroup label="Naturwissenschaften">
+                <option value="Biologie">Biologie</option>
+                <option value="Chemie">Chemie</option>
+                <option value="Elektrotechnik">Elektrotechnik</option>
+                <option value="Informatik">Informatik</option>
+                <option value="Mathematik">Mathematik</option>
+                <option value="Medizin">Medizin</option>
+                <option value="Naturkunde">Naturkunde</option>
+                <option value="Physik">Physik</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </optgroup>
+              <optgroup label="Sprachen">
+                <option value="Chinesisch">Chinesisch</option>
+                <option value="Deutsch">Deutsch</option>
+                <option value="Englisch">Englisch</option>
+                <option value="Französisch">Französisch</option>
+                <option value="Griechisch">Griechisch</option>
+                <option value="Italienisch">Italienisch</option>
+                <option value="Latein">Latein</option>
+                <option value="Russisch">Russisch</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </optgroup>
+              <optgroup label="Gesellschaft">
+                <option value="Ethik">Ethik</option>
+                <option value="Geschichte">Geschichte</option>
+                <option value="Literatur">Literatur</option>
+                <option value="Musik">Musik</option>
+                <option value="Politik">Politik</option>
+                <option value="Recht">Recht</option>
+                <option value="Soziales">Soziales</option>
+                <option value="Sport">Sport</option>
+                <option value="Verkehrskunde">Verkehrskunde</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </optgroup>
+              <optgroup label="Wirtschaft">
+                <option value="BWL">BWL</option>
+                <option value="Finanzen">Finanzen</option>
+                <option value="Landwirtschaft">Landwirtschaft</option>
+                <option value="Marketing">Marketing</option>
+                <option value="VWL">VWL</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </optgroup>
+              <optgroup label="Geistewissenschaften">
+                <option value="Kriminologie">Kriminologie</option>
+                <option value="Philosophie">Philosophie</option>
+                <option value="Psychologie">Psychologie</option>
+                <option value="Pädagogik">Pädagogik</option>
+                <option value="Theologie">Theologie</option>
+                <option value="Sonstiges">Sonstiges</option>
+              </optgroup>
+            </select>
+            <p id="kategoriePflicht"></p>
+            <!-- Beschreibung Kasten -->
+            <p>Beschreibung</p>
+            <textarea
+              class=""
+              rows="10"
+              cols=""
+              id="editKastenBeschreibung"
+            ></textarea>
+            <p></p>
+            <!-- Radio button Öffentlich/Privat -->
+            <p>Sichtbarkeit</p>
+            <div class="editRadioButtons">
+              <fieldset>
+                <input
+                  type="radio"
+                  name="sichtbarkeit"
+                  value="Öffentlich"
+                  class="editRadioButton"
+                />Öffentlich
+                <input
+                  type="radio"
+                  name="sichtbarkeit"
+                  value="Privat"
+                  class="editRadioButton"
+                />Privat
+              </fieldset>
+            </div>
+            <p></p>
+            <!-- Create new Kasten button -->
+            <p></p>
+            <div class="editKastenButton">
+              <input
+                type="submit"
+                value="Speichern und weiter"
+                class="btnYellow"
+                id="editKastenButton"
+              />
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+    <script src="js/edit.js"></script>
+  </body>
+</html>

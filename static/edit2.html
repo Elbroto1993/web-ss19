@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- MDE Editor -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="index.html" class="logo">
+        <img src="logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <div class="logout">
+        <button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">Max Mustermann</h4>
+          <button class="logoutButton" id="logoutButton">
+            <small>Logout</small>
+          </button>
+        </div>
+        <img
+          src="images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+        />
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList">
+          <li class="menuItems">
+            <a href="index.html"
+              ><img
+                src="icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten.html"
+              ><img
+                src="icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien.html"
+              ><img
+                src="icons/Meine-Karteien.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Meine Karteien<small
+                class="karteiZaehler"
+                id="indexKartenCounterUser"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="profil.html"
+              ><img
+                src="icons/Mein-Profil.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Mein Profil</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- Main display -->
+      <div class="mainWindow">
+        <h1 class="pageName">
+          <strong>Karteikasten erstellen / Karteikasten bearbeiten</strong>
+        </h1>
+        <h3>
+          Hier kannst du eine neue Kartei erstellen oder eine vorhandene nach
+          Bedarf bearbeiten.
+        </h3>
+        <div class="card">
+          <div class="viewFlex">
+            <div>
+              <h5>Name</h5>
+              <h1><strong id="viewName">Geometrie</strong></h1>
+            </div>
+            <div>
+              <h5>Kategorie</h5>
+              <h1>
+                <strong id="viewKategorie"
+                  >Naturwissenschaften > Geometrie</strong
+                >
+              </h1>
+            </div>
+            <div>
+              <h5>Fortschritt</h5>
+              <h1><strong id="viewFortschritt">0 %</strong></h1>
+            </div>
+            <div>
+              <button class="btnGreen" id="editKastenButton">Bearbeiten</button>
+            </div>
+            <div class="viewPositionHexagonHeader">
+              <div class="hexagon hexagon2">
+                <div class="hexagon-in1"><div class="hexagon-in2"></div></div>
+              </div>
+              <div class="insideHexagon">
+                <p id="viewCountKarten">0</p>
+                <p>Karten</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <section class="flex">
+          <div class="viewCardList">
+            <div class="viewCardListGrid" id="viewListKarten"></div>
+          </div>
+
+          <div class=" card viewSingleCard" id="edit2SingleCard">
+            <div class="edit2SingleCardGrid">
+              <div class="viewPositionTitle">Titel</div>
+              <input type="text" class="viewPositionTitle" id="edit2input" />
+              <div>Frage</div>
+              <div>
+                <textarea
+                  name=""
+                  id="edit2Textarea1"
+                  cols="30"
+                  rows="10"
+                ></textarea>
+              </div>
+              <div>Antwort</div>
+              <div>
+                <textarea
+                  name=""
+                  id="edit2Textarea2"
+                  cols="100"
+                  rows="7"
+                ></textarea>
+              </div>
+            </div>
+            <div class="edit2SingleCardButtons">
+              <button class="btnYellow" id="saveButton">
+                Speichern
+              </button>
+              <button class="btnRed" id="stopButton">
+                Abbrechen
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <!-- Toggle modal to confirm delete proifle -->
+    <div class="modal" id="profilDeleteModal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="card modalDeleteGrid">
+          <h3 class="modalDeleteHeader">Löschen</h3>
+          <p>Bist du dir sicher, dass du diese Karteikarte löschen möchtest?</p>
+          <div class="modalDeleteButtons">
+            <button class="btnGreen" id="profilKeepButton">
+              Karteikarte behalten
+            </button>
+            <button class="btnRed" id="profilFinallyedit2deleteButton">
+              Karteikarte löschen
+            </button>
+          </div>
+        </div>
+      </div>
+      <button
+        class="modal-close is-large"
+        id="modal-close"
+        aria-label="close"
+      ></button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="js/edit2.js"></script>
+  </body>
+</html>
