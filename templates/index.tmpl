@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="static/css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+  <!-- Create header and sidebar for logged in user -->
+  {{if .LoggedIn}}
+    <!-- Header -->
+    <header>
+      <a href="index" class="logo">
+        <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Neue Kartei/ Logout/ Profilpic -->
+      <div class="logout">
+        <a href="edit"><button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button></a>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">{{.UserName}}</h4>
+          <form action="/logout" method="POST">
+            <button class="logoutButton" id="logoutButton">
+          </form>
+           <small>Logout</small>
+          </button>
+        </div>
+          <img
+          src="static/images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
+            <a href="index"
+              ><img
+                src="static/icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten"
+              ><img
+                src="static/icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >{{.AnzKasten}}</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien"
+            ><img
+              src="static/icons/Meine-Karteien.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">0</small></a
+          >
+          </li>
+          <li class="menuItems">
+            <a href="profil"
+            ><img
+              src="static/icons/Mein-Profil.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Mein Profil</a
+          >
+        </li>
+        </ul>
+      </div>
+      <!-- Create header and sidebar for NOT logged in user -->
+      {{else}}
+          <header>
+      <a href="index" class="logo">
+        <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
+      <div class="login" id="loginField">
+        <form class="loginForm" action="/authenticate-user" method="POST">
+          <input
+            type="text"
+            placeholder="Nutzername"
+            id="loginUsername"
+            name="username"
+            class="loginInput"
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            id="loginPassword"
+            name="password"
+            class="loginInput"
+          />
+          <input
+            type="submit"
+            value="Login"
+            class="btnYellow"
+            id="loginButton"
+          />
+        </form>
+        <a href="register" class="registerLink">Registrieren</a>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
+            <a href="index"
+              ><img
+                src="static/icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten"
+              ><img
+                src="static/icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >{{.AnzKasten}}</small
+              ></a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- End of creating header and sidebar -->
+      {{end}}
+      <!-- Main display -->
+      <div class="mainWindow">
+        <section class="hero card">
+          <div class="mainWindowContent">
+            <h1 class="mainHeader">
+              Willkommen bei
+              <span class="headerBrainColor">Brain</span
+              ><span class="headerTrainColor">Train</span>
+            </h1>
+            <h2>
+              Hier haben sich
+              <strong><span id="indexNutzerCounter">{{.AnzUser}}</span> Nutzer</strong>
+              angemeldet und zusammen
+              <strong
+                ><span id="indexKartenCounter">{{.AnzKarten}}</span> Lernkarte/n</strong
+              >
+              in
+              <strong
+                ><span id="indexKastenCounterAll">{{.AnzKasten}}</span> Karteien</strong
+              >
+              erstellt.
+            </h2>
+          </div>
+        </section>
+      </div>
+    </div>
+    <!-- <script src="static/js/index.js"></script> -->
+  </body>
+</html>

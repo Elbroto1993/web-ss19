@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--  Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+    />
+    <!-- Bulma -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- Import style.css -->
+    <link rel="stylesheet" href="static/css/style.css" />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <!-- Title and description -->
+    <meta
+      name="description"
+      content="WebApp um mit Karteikarten zu lernen - WebProgrammierungSS2019"
+    />
+    <title>BrainTrain</title>
+  </head>
+
+  <body>
+      <!-- Create header and sidebar for logged in user -->
+  {{if .LoggedIn}}
+    <!-- Header -->
+    <header>
+      <a href="index" class="logo">
+        <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
+      <div class="logout">
+        <a href="edit"><button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button></a>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">{{.UserName}}</h4>
+          <form action="/logout" method="POST">
+            <button class="logoutButton" id="logoutButton">
+          </form>
+           <small>Logout</small>
+          </button>
+        </div>
+          <img
+          src="static/images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
+            <a href="index"
+              ><img
+                src="static/icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten"
+              ><img
+                src="static/icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien"
+            ><img
+              src="static/icons/Meine-Karteien.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">0</small></a
+          >
+          </li>
+          <li class="menuItems">
+            <a href="profil"
+            ><img
+              src="static/icons/Mein-Profil.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Mein Profil</a
+          >
+        </li>
+        </ul>
+      </div>
+      <!-- Create header and sidebar for NOT logged in user -->
+      {{else}}
+          <header>
+      <a href="index" class="logo">
+        <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
+      <div class="login" id="loginField">
+        <form class="loginForm" action="/authenticate-user" method="POST">
+          <input
+            type="text"
+            placeholder="Nutzername"
+            id="loginUsername"
+            name="username"
+            class="loginInput"
+          />
+          <input
+            type="password"
+            placeholder="Passwort"
+            id="loginPassword"
+            name="password"
+            class="loginInput"
+          />
+          <input
+            type="submit"
+            value="Login"
+            class="btnYellow"
+            id="loginButton"
+          />
+        </form>
+        <a href="register" class="registerLink">Registrieren</a>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
+            <a href="index"
+              ><img
+                src="static/icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten"
+              ><img
+                src="static/icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- End of creating header and sidebar -->
+      {{end}}
+      <!-- Main display -->
+      <div class="mainWindow">
+        <h1 class="pageName"><strong>Karteikasten anschauen</strong></h1>
+        <h3>
+          Hier kannst du dir eine beliebige Karte anschauen ohne Sie zu
+          bearbeiten.
+        </h3>
+        <div class="card">
+          <div class="viewFlex">
+            <div>
+              <h5>Name</h5>
+              <h1><strong id="viewName">{{.Titel}}</strong></h1>
+            </div>
+            <div>
+              <h5>Kategorie</h5>
+              <h1>
+                <strong id="viewKategorie"
+                  >{{.Ueberkategorie}} > {{.Kategorie}}</strong
+                >
+              </h1>
+            </div>
+            <div>
+              <h5>Erstellt von</h5>
+              <h1><strong id="viewCreatedBy">Max Mustermann</strong></h1>
+            </div>
+            <div>
+              <h5>Fortschritt</h5>
+              <h1><strong id="viewFortschritt">{{.Fortschritt}} %</strong></h1>
+            </div>
+            <div class="viewPositionHexagonHeader">
+              <div class="hexagon hexagon2">
+                <div class="hexagon-in1"><div class="hexagon-in2"></div></div>
+              </div>
+              <div class="insideHexagon">
+                <p id="viewCountKarten">{{.AnzKarten}}</p>
+                <p>Karten</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Liste von allen Karten -->
+        <section class="flex">
+          <div class="viewCardList">
+            <div class="viewCardListGrid" id="viewListKarten">
+            {{range $i, $a := .Karten}}
+              <div class="card">
+                <p>#{{$i}}</p>
+                <a href='view?_kastenid={{.KastenID}}&_karteid={{.Id}}'><button class="noStyleButton karteButton">
+                  {{.Titel}}
+                </button></a>
+              </div>
+            {{end}}
+            </div>
+          </div>
+          <!-- Einzelne Karte -->
+          <div class="viewGrid card viewSingleCard" id="viewSingleCard">
+            <div class="viewPositionTitle">Titel</div>
+            <div class="flexNoWrap viewPositionTitle">
+              <div><strong> {{.SelectedKarte.Titel}}</strong></div>
+              <div>
+                <div class="flexNoWrap">
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1 ">
+                        <div class="hexagon-in2" id='{{if eq "0" .SelectedKarte.Fach}}hex2{{end}}'></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>0</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2" id='{{if eq "1" .SelectedKarte.Fach}}hex2{{end}}'></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>1</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2" id='{{if eq "2" .SelectedKarte.Fach}}hex2{{end}}'></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>2</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2" id='{{if eq "3" .SelectedKarte.Fach}}hex2{{end}}'></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>3</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="hexagon hexagon2 viewHexagon">
+                      <div class="hexagon-in1">
+                        <div class="hexagon-in2" id='{{if eq "4" .SelectedKarte.Fach}}hex2{{end}}'></div>
+                      </div>
+                    </div>
+                    <div class="viewFachInsideHexagon">
+                      <p>4</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>Frage</div>
+            <div>
+              {{.SelectedKarte.Frage}}
+            </div>
+            <div>Antwort</div>
+            <div>
+              {{.SelectedKarte.Antwort}}
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <script src="static/js/view.js"></script>
+  </body>
+</html>
