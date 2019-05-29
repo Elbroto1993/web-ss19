@@ -33,8 +33,12 @@
     />
     <title>BrainTrain</title>
   </head>
-
+  <!-- GLOBAL HELPER VARIABLES  -->
+  {{$LoggedIn := .LoggedIn}}
+  <!-- ________________________ -->
   <body>
+  <!-- Create header and sidebar for logged in user -->
+  {{if .LoggedIn}}
     <!-- Header -->
     <header>
       <a href="index" class="logo">
@@ -46,18 +50,108 @@
           <i class="fas fa-bars"></i>
         </button>
       </nav>
+      <!-- Neue Kartei/ Logout/ Profilpic -->
+      <div class="logout">
+        <a href="edit"><button class="btnYellow newKarteiButton" id="newKarteiButton">
+          Neue Kartei
+        </button></a>
+        <div class="headerUserInfo">
+          <h4 id="logoutUsername">{{.UserName}}</h4>
+          <form action="/logout" method="POST">
+            <button class="logoutButton" id="logoutButton">
+          </form>
+           <small>Logout</small>
+          </button>
+        </div>
+          <img
+          src="static/images/defaultUser.png"
+          alt="gray default male profile picture"
+          height="30"
+          width="30"
+          />
+        </div>
+      </div>
+    </header>
+    <!-- Sidebar -->
+    <div class="main">
+      <div class="menuSideBar">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
+            <a href="index"
+              ><img
+                src="static/icons/Home.svg"
+                alt=""
+                height="30"
+                width="30"
+              />
+              Home</a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="karteikasten"
+              ><img
+                src="static/icons/Karteikasten.svg"
+                alt=""
+                height="30"
+                width="30"
+              />Karteikasten<small
+                class="karteiZaehler"
+                id="indexKastenCounterPublic"
+                >0</small
+              ></a
+            >
+          </li>
+          <li class="menuItems">
+            <a href="meinekarteien"
+            ><img
+              src="static/icons/Meine-Karteien.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">0</small></a
+          >
+          </li>
+          <li class="menuItems">
+            <a href="profil"
+            ><img
+              src="static/icons/Mein-Profil.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Mein Profil</a
+          >
+        </li>
+        </ul>
+      </div>
+      <!-- Create header and sidebar for NOT logged in user -->
+      {{else}}
+          <header>
+      <a href="index" class="logo">
+        <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
+        <h3>BrainTrain</h3>
+      </a>
+      <nav class="burgerNav">
+        <button id="mainButton">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
       <div class="login" id="loginField">
-        <form class="loginForm">
+        <form class="loginForm" action="/authenticate-user" method="POST">
           <input
             type="text"
             placeholder="Nutzername"
             id="loginUsername"
+            name="username"
             class="loginInput"
           />
           <input
             type="password"
             placeholder="Passwort"
             id="loginPassword"
+            name="password"
             class="loginInput"
           />
           <input
@@ -74,7 +168,7 @@
     <div class="main">
       <div class="menuSideBar">
         <ul class="menuList" id="menuList">
-          <li class="menuItems">
+          <li class="menuItems selectedSidebarItem">
             <a href="index"
               ><img
                 src="static/icons/Home.svg"
@@ -85,7 +179,7 @@
               Home</a
             >
           </li>
-          <li class="menuItems selectedSidebarItem">
+          <li class="menuItems">
             <a href="karteikasten"
               ><img
                 src="static/icons/Karteikasten.svg"
@@ -95,12 +189,14 @@
               />Karteikasten<small
                 class="karteiZaehler"
                 id="indexKastenCounterPublic"
-                >8</small
+                ></small
               ></a
             >
           </li>
         </ul>
       </div>
+      <!-- End of creating header and sidebar -->
+      {{end}}
       <!-- Main display -->
       <div class="mainWindow">
         <h1 class="pageName">
@@ -184,7 +280,7 @@
           </div>
           <!-- Naturwissenschaften -->
           <div class="flex karteikastenLayout" id="naturwissenschaften">
-            {{range .}}
+            {{range .Kaesten}}
               {{if eq "Naturwissenschaften" .Ueberkategorie}}
                 <div class="karteikastenCard">
                       <h3 class="karteikastenCardUnterkategorie">{{.Kategorie}}</h3>              
@@ -207,7 +303,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      <a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>
+                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
                     </div>
               {{end}}
             {{end}}
@@ -219,7 +315,7 @@
             </h2>
           </div>
           <div class="flex karteikastenLayout" id="sprachen">
-          {{range .}}
+          {{range .Kaesten}}
               {{if eq "Sprachen" .Ueberkategorie}}
                 <div class="karteikastenCard">
                       <h3 class="karteikastenCardUnterkategorie">{{.Kategorie}}</h3>              
@@ -242,7 +338,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      <a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>
+                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
                     </div>
               {{end}}
             {{end}}
@@ -254,7 +350,7 @@
             </h2>
           </div>
           <div class="flex karteikastenLayout" id="wirtschaft">
-          {{range .}}
+          {{range .Kaesten}}
               {{if eq "Wirtschaft" .Ueberkategorie}}
                 <div class="karteikastenCard">
                       <h3 class="karteikastenCardUnterkategorie">{{.Kategorie}}</h3>              
@@ -277,7 +373,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      <a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>                    </div>
+                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                   </div>
               {{end}}
             {{end}}
             </div>
@@ -288,7 +384,7 @@
             </h2>
           </div>
           <div class="flex karteikastenLayout" id="geisteswissenschaften">
-          {{range .}}
+          {{range .Kaesten}}
               {{if eq "Geisteswissenschaften" .Ueberkategorie}}
                 <div class="karteikastenCard">
                       <h3 class="karteikastenCardUnterkategorie">{{.Kategorie}}</h3>              
@@ -311,7 +407,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      <a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>                    </div>
+                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                    </div>
               {{end}}
             {{end}}
           </div>

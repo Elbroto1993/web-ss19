@@ -42,6 +42,22 @@ type IndexData struct {
 	UserName  string `json:"username"`
 }
 
+// KarteikastenData Struct
+type KarteikastenData struct {
+	Id        string         `json:"id"`
+	LoggedIn  string         `json:"loggedin"`
+	UserName  string         `json:"username"`
+	AnzKarten string         `json:"anzkarten"`
+	Kaesten   []Karteikasten `json:"kaesten"`
+	// Kategorie       string `json:"kategorie"`
+	// Titel           string `json:"titel"`
+	// Beschreibung    string `json:"beschreibung"`
+	// Private         string `json:"private"`
+	// CreatedByUserID string `json:"createdByUserId"`
+	// UserID          string `json:"userid"`
+	// Ueberkategorie  string `json:"ueberkategorie"`
+}
+
 // ViewData Struct
 type ViewData struct {
 	Kategorie       string        `json:"kategorie"`
@@ -169,11 +185,11 @@ func GetIndexData() (IndexData, error) {
 }
 
 // GetKarteikastenData ...
-func GetKarteikastenData() ([]Karteikasten, error) {
+func GetKarteikastenData() (KarteikastenData, error) {
 	// Get all Kaesten and decode them
 	allKasten, err := GetAllKasten()
 	if err != nil {
-		return []Karteikasten{}, err
+		return KarteikastenData{}, err
 	}
 	var decodedKaesten []Karteikasten
 	mapstructure.Decode(allKasten, &decodedKaesten)
@@ -183,10 +199,11 @@ func GetKarteikastenData() ([]Karteikasten, error) {
 		decodedKaesten[index].Id = v["_id"].(string)
 		index++
 	}
+
 	// Get all Karten and decode them
 	allKarten, err := GetAllKarten()
 	if err != nil {
-		return []Karteikasten{}, err
+		return KarteikastenData{}, err
 	}
 	var decodedKarten []Karteikarte
 	mapstructure.Decode(allKarten, &decodedKarten)
@@ -198,9 +215,11 @@ func GetKarteikastenData() ([]Karteikasten, error) {
 				countKarten++
 			}
 		}
-		//	decodedKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		decodedKaesten[i].AnzKarten = strconv.Itoa(countKarten)
 	}
-	return decodedKaesten, nil
+	var retValue KarteikastenData
+	retValue.Kaesten = decodedKaesten
+	return retValue, nil
 }
 
 // GetViewData ...

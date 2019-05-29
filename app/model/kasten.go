@@ -11,6 +11,7 @@ import (
 type Karteikasten struct {
 	Id              string `json:"_id"`
 	Rev             string `json:"_rev"`
+	Type            string `json:"type"`
 	Kategorie       string `json:"kategorie"`
 	Titel           string `json:"titel"`
 	Beschreibung    string `json:"beschreibung"`
@@ -18,11 +19,14 @@ type Karteikasten struct {
 	CreatedByUserID string `json:"createdByUserId"`
 	UserID          string `json:"userid"`
 	Ueberkategorie  string `json:"ueberkategorie"`
+	AnzKarten       string `json:"anzkarten"`
 	couchdb.Document
 }
 
 // Add Kasten
 func (karteikasten Karteikasten) Add() (err error) {
+
+	karteikasten.Type = "Karteikasten"
 
 	// Convert Karteikasten struct to map[string]interface as required by Save() method
 	k, err := karteikasten2Map(karteikasten)
@@ -32,6 +36,7 @@ func (karteikasten Karteikasten) Add() (err error) {
 	delete(k, "_rev")
 
 	// Add karteikasten to DB
+
 	_, _, err = btDB.Save(k, nil)
 
 	if err != nil {

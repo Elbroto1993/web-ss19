@@ -1,18 +1,14 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"net/http"
 )
 
 // AddKasten controller
-func Addkasten(w http.ResponseWriter, r *http.Request) {
-	titel := r.FormValue("titel")
-	kategorie := r.FormValue("kategorie")
-	ueberkategorie := r.FormValue("ueberkategorie")
-	beschreibung := r.FormValue("beschreibung")
-	private := r.FormValue("private")
+func AddKasten(w http.ResponseWriter, r *http.Request) {
 
 	// Add username from session to struct
 	session, err := store.Get(r, "session")
@@ -27,15 +23,15 @@ func Addkasten(w http.ResponseWriter, r *http.Request) {
 	createdByUserID := actUser.Id
 
 	kasten := model.Karteikasten{}
-	kasten.Titel = titel
-	kasten.Kategorie = kategorie
-	kasten.Ueberkategorie = ueberkategorie
-	kasten.Beschreibung = beschreibung
-	kasten.Private = private
+
+	err = json.NewDecoder(r.Body).Decode(&kasten)
+	if err != nil {
+		fmt.Println(err)
+	}
 	kasten.CreatedByUserID = createdByUserID
 	kasten.UserID = createdByUserID
 
-	err := kasten.Add()
+	err = kasten.Add()
 	if err != nil {
 		data := struct {
 			ErrorMsg string

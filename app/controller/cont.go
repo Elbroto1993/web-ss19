@@ -52,6 +52,14 @@ func Karteikasten(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// If user is logged in add loggedin and username to struct
+	session, err := store.Get(r, "session")
+	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
+		kaesten.LoggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
+		kaesten.UserName = session.Values["username"].(string)
+	}
+
 	tmpl.ExecuteTemplate(w, "karteikasten.tmpl", kaesten)
 }
 func Lern(w http.ResponseWriter, r *http.Request) {

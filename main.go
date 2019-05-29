@@ -25,5 +25,7 @@ func main() {
 	http.HandleFunc("/authenticate-user", controller.AuthenticateUser)
 	http.HandleFunc("/logout", controller.Logout)
 
+	http.HandleFunc("/add-kasten", controller.AddKasten)
+
 	server.ListenAndServe()
 }
