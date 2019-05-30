@@ -40,7 +40,7 @@
 
   <body>
       <!-- Create header and sidebar for logged in user -->
-  {{if .LoggedIn}}
+  {{if eq "true" .LoggedIn}}
     <!-- Header -->
     <header>
       <a href="index" class="logo">

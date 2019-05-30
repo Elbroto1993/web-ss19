@@ -35,7 +35,7 @@
   </head>
 
   <body>
-    <!-- Header -->
+        <!-- Header -->
     <header>
       <a href="index" class="logo">
         <img src="static/logo/Logo.svg" alt="Weisses Logo eines Gehirns" />
@@ -46,29 +46,33 @@
           <i class="fas fa-bars"></i>
         </button>
       </nav>
+      <!-- Neue Kartei/ Logout/ Profilpic -->
       <div class="logout">
-        <button class="btnYellow newKarteiButton" id="newKarteiButton">
+        <a href="edit"><button class="btnYellow newKarteiButton" id="newKarteiButton">
           Neue Kartei
-        </button>
+        </button></a>
         <div class="headerUserInfo">
-          <h4 id="logoutUsername">Max Mustermann</h4>
-          <button class="logoutButton" id="logoutButton">
-            <small>Logout</small>
+          <h4 id="logoutUsername">{{.UserName}}</h4>
+          <form action="/logout" method="POST">
+            <button class="logoutButton" id="logoutButton">
+          </form>
+           <small>Logout</small>
           </button>
         </div>
-        <img
+          <img
           src="static/images/defaultUser.png"
           alt="gray default male profile picture"
           height="30"
           width="30"
-        />
+          />
+        </div>
       </div>
     </header>
     <!-- Sidebar -->
     <div class="main">
       <div class="menuSideBar">
-        <ul class="menuList">
-          <li class="menuItems">
+        <ul class="menuList" id="menuList">
+          <li class="menuItems selectedSidebarItem">
             <a href="index"
               ><img
                 src="static/icons/Home.svg"
@@ -89,36 +93,32 @@
               />Karteikasten<small
                 class="karteiZaehler"
                 id="indexKastenCounterPublic"
-                >8</small
-              ></a
-            >
-          </li>
-          <li class="menuItems selectedSidebarItem">
-            <a href="meinekarteien"
-              ><img
-                src="static/icons/Meine-Karteien.svg"
-                alt=""
-                height="30"
-                width="30"
-              />
-              Meine Karteien<small
-                class="karteiZaehler"
-                id="indexKartenCounterUser"
-                >8</small
+                >{{.AnzOeffentlicheKaesten}}</small
               ></a
             >
           </li>
           <li class="menuItems">
-            <a href="profil"
-              ><img
-                src="static/icons/Mein-Profil.svg"
-                alt=""
-                height="30"
-                width="30"
-              />
-              Mein Profil</a
-            >
+            <a href="meinekarteien"
+            ><img
+              src="static/icons/Meine-Karteien.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">{{.AnzEigeneKaesten}}</small></a
+          >
           </li>
+          <li class="menuItems">
+            <a href="profil"
+            ><img
+              src="static/icons/Mein-Profil.svg"
+              alt=""
+              height="30"
+              width="30"
+            />
+            Mein Profil</a
+          >
+        </li>
         </ul>
       </div>
       <!-- Main display -->
@@ -199,7 +199,7 @@
                 <strong>Selbst erstelle Karteikästen</strong>
               </h2>
               <div class="flex karteikastenLayout" id="ownKasten">
-              {{range .}}
+              {{range .Kaesten}}
                 <div class="karteikastenCard" id="${listKasten[i].kastenid}">
                   <h3 class="karteikastenCardUnterkategorie">
                     {{.Ueberkategorie}}>{{.Kategorie}}
@@ -240,8 +240,8 @@
                       Fortschritt: <strong id="fortschritt">{{.Fortschritt}} %</strong>
                       </p>
                       <div id='{{.Id}}'>
-                        <button class="btnYellow kastenLernButton">Lernen</button>
-                        <button class="btnGreen kastenEditButton">Bearbeiten</button>
+                        <button class="btnYellow lernenButtons"><a href='lern?_kastenid={{.Id}}' class="whiteLink">Lernen</a></button>
+                        <button class="btnGreen kastenEditButton"><a href='edit?_kastenid={{.Id}}' class="whiteLink">Bearbeiten</a></button>
                         <button class="btnRed kastenDeleteButton"><img src="static/icons/Delete.svg"></button>
                       </div>
                   </div>
@@ -253,7 +253,7 @@
                   <strong>Karteikästen anderer Nutzer</strong>
                 </h2>
                 <div class="flex karteikastenLayout" id="kastenFromOtherUser">
-                  {{range .}}
+                  {{range .Kaesten}}
                 <div class="karteikastenCard" id="${listKasten[i].kastenid}">
                   <h3 class="karteikastenCardUnterkategorie">
                     {{.Ueberkategorie}}>{{.Kategorie}}
@@ -285,7 +285,7 @@
                       Fortschritt: <strong id="fortschritt">{{.Fortschritt}} %</strong>
                       </p>
                       <div id='{{.Id}}'>
-                        <button class="btnYellow kastenLernButton">Lernen</button>
+                        <button class="btnYellow lernenButtons"><a href='lern?_kastenid={{.Id}}' class="whiteLink">Lernen</a></button>
                         <button class="btnRed kastenDeleteButton">X</button>
                       </div>
                   </div>

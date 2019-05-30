@@ -68,6 +68,23 @@ func DeleteUser(username string) (err error) {
 		return err
 	}
 
+	// Delete all kaesten from user
+	kaesten, err := getEigeneKaesten(username)
+	if err != nil {
+		return err
+	}
+	for i := 0; i < len(kaesten); i++ {
+		btDB.Delete(kaesten[i].Id)
+	}
+
+	karten, err := GetEigeneKarten(username)
+	if err != nil {
+		return err
+	}
+	for i := 0; i < len(karten); i++ {
+		btDB.Delete(karten[i].Id)
+	}
+
 	// Delete user from DB
 	err = btDB.Delete(user.Id)
 

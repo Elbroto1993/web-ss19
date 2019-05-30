@@ -111,10 +111,20 @@ func Lern2(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "lern2.tmpl", data)
 }
 func Meinekarteien(w http.ResponseWriter, r *http.Request) {
-	kaesten, err := model.GetKarteikastenData("")
+	// Add username from session to struct
+	session, err := store.Get(r, "session")
 	if err != nil {
 		fmt.Println(err)
 	}
+	userName := session.Values["username"].(string)
+
+	kaesten, err := model.GetMeineKarteienData(userName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	kaesten.UserName = userName
+
 	tmpl.ExecuteTemplate(w, "meinekarteien.tmpl", kaesten)
 }
 func Profil(w http.ResponseWriter, r *http.Request) {

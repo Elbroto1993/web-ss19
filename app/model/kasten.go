@@ -20,6 +20,7 @@ type Karteikasten struct {
 	UserID          string `json:"userid"`
 	Ueberkategorie  string `json:"ueberkategorie"`
 	AnzKarten       string `json:"anzkarten"`
+	Fortschritt     string `json:"fortschritt"`
 	couchdb.Document
 }
 

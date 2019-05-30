@@ -42,7 +42,7 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 		}
 		tmpl.ExecuteTemplate(w, "register.tmpl", data)
 	} else {
-		tmpl.ExecuteTemplate(w, "index.tmpl", nil)
+		Index(w, r)
 	}
 }
 
@@ -57,6 +57,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
+	Index(w, r)
 }
 
 // UpdateUser controller
@@ -93,11 +94,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var user = model.User{}
-	var data = struct {
-		ErrorMsg string
-	}{
-		ErrorMsg: "Username and/or password wrong!",
-	}
+	errorMsg := "Username and/or password wrong!"
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
@@ -116,10 +113,15 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 			session.Save(r, w)
 			http.Redirect(w, r, "/", http.StatusFound)
 		} else {
+			data, err := model.GetIndexData(username)
+			if err != nil {
+				fmt.Println(err)
+			}
+			data.ErrorMsg = errorMsg
 			tmpl.ExecuteTemplate(w, "index.tmpl", data)
 		}
 	} else {
-		tmpl.ExecuteTemplate(w, "index.tmpl", data)
+		Index(w, r)
 	}
 }
 
@@ -131,7 +133,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	session.Values["username"] = ""
 	session.Save(r, w)
 
-	tmpl.ExecuteTemplate(w, "index.tmpl", nil)
+	Index(w, r)
 }
 
 // Auth is an authentication handler

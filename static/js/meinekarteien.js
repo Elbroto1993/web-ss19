@@ -1,21 +1,5 @@
 "use strict";
 
-let lernButtons = document.getElementsByClassName("kastenLernButton");
-for (let i = 0; i < lernButtons.length; i++) {
-  lernButtons[i].addEventListener("click", function() {
-    let id = lernButtons[i].parentNode.id;
-    window.location.href = `http://localhost:8080/lern?_kastenid=${id}`;
-  });
-}
-
-let editButtons = document.getElementsByClassName("kastenEditButton");
-for (let i = 0; i < editButtons.length; i++) {
-  editButtons[i].addEventListener("click", function() {
-    let id = editButtons[i].parentNode.id;
-    window.location.href = `http://localhost:8080/edit2?_kastenid=${id}`;
-  });
-}
-
 let deleteButtons = document.getElementsByClassName("kastenDeleteButton");
 for (let i = 0; i < deleteButtons.length; i++) {
   deleteButtons[i].addEventListener("click", deleteKasten);

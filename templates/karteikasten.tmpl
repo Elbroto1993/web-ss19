@@ -38,7 +38,7 @@
   <!-- ________________________ -->
   <body>
   <!-- Create header and sidebar for logged in user -->
-  {{if .LoggedIn}}
+  {{if eq "true" .LoggedIn}}
     <!-- Header -->
     <header>
       <a href="index" class="logo">
@@ -303,7 +303,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
+                      {{if eq "true" $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
                     </div>
               {{end}}
             {{end}}
@@ -338,7 +338,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
+                      {{if eq "true" $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}
                     </div>
               {{end}}
             {{end}}
@@ -373,7 +373,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                   </div>
+                      {{if eq "true" $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                   </div>
               {{end}}
             {{end}}
             </div>
@@ -407,7 +407,7 @@
                     <p class="karteikastenCardBeschreibung">
                     {{.Beschreibung}}
                     </p>
-                      {{if $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                    </div>
+                     {{if eq "true" $LoggedIn}}<a href='lern?_kastenid={{.Id}}'><button class="btnYellow lernenButtons">Lernen</button></a>{{end}}                    </div>
               {{end}}
             {{end}}
           </div>

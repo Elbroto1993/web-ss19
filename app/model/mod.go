@@ -30,6 +30,7 @@ type IndexData struct {
 	UserName               string `json:"username"`
 	AnzEigeneKaesten       string `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
+	ErrorMsg               string `json:"errormsg"`
 }
 
 // KarteikastenData Struct
@@ -39,6 +40,16 @@ type KarteikastenData struct {
 	UserName               string         `json:"username"`
 	AnzEigeneKaesten       string         `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string         `json:"anzoeffentlichekaesten"`
+	Kaesten                []Karteikasten `json:"kaesten"`
+}
+
+// MeineKarteienData Struct
+type MeineKarteienData struct {
+	Id                     string         `json:"id"`
+	UserName               string         `json:"username"`
+	AnzEigeneKaesten       string         `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string         `json:"anzoeffentlichekaesten"`
+	Fortschritt            string         `json:"fortschritt"`
 	Kaesten                []Karteikasten `json:"kaesten"`
 }
 
@@ -182,7 +193,7 @@ func GetIndexData(username string) (IndexData, error) {
 	if err != nil {
 		return IndexData{}, err
 	}
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return IndexData{}, err
 	}
@@ -205,7 +216,7 @@ func GetIndexData(username string) (IndexData, error) {
 
 // GetRegisterData ...
 func GetRegisterData() (RegisterData, error) {
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return RegisterData{}, err
 	}
@@ -221,7 +232,7 @@ func GetRegisterData() (RegisterData, error) {
 // GetKarteikastenData ...
 func GetKarteikastenData(username string) (KarteikastenData, error) {
 	// Get all oeffentliche Kaesten and decode them
-	alleOeffentlichenKaesten, err := getAllOeffentlicheKaesten()
+	alleOeffentlichenKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return KarteikastenData{}, err
 	}
@@ -259,10 +270,50 @@ func GetKarteikastenData(username string) (KarteikastenData, error) {
 	return retValue, nil
 }
 
+// GetMeineKarteienData ...
+func GetMeineKarteienData(username string) (MeineKarteienData, error) {
+	// Get all oeffentliche Kaesten and decode them
+	alleOeffentlichenKaesten, err := GetAlleOeffentlichenKaesten()
+	if err != nil {
+		return MeineKarteienData{}, err
+	}
+
+	eigeneKaesten, err := getEigeneKaesten(username)
+	if err != nil {
+		return MeineKarteienData{}, err
+	}
+
+	// Get all Karten and decode them
+	allKarten, err := GetAllKarten()
+	if err != nil {
+		return MeineKarteienData{}, err
+	}
+	var decodedKarten []Karteikarte
+	mapstructure.Decode(allKarten, &decodedKarten)
+	// Fill AnzKarten from Karteikasten with values
+	for i := 0; i < len(eigeneKaesten); i++ {
+		var tempKarten []Karteikarte
+		countKarten := 0
+		for j := 0; j < len(decodedKarten); j++ {
+			if string(eigeneKaesten[i].Id) == decodedKarten[j].KastenID {
+				tempKarten = append(tempKarten, decodedKarten[j])
+				countKarten++
+			}
+		}
+		eigeneKaesten[i].Fortschritt = getFortschritt(tempKarten)
+		eigeneKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+	}
+	var retValue MeineKarteienData
+	retValue.Kaesten = eigeneKaesten
+	retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
+	retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
+	return retValue, nil
+}
+
 // GetViewData ...
 func GetViewData(kastenid string, karteid string, username string) (ViewData, error) {
 	// Data for sidebar
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return ViewData{}, err
 	}
@@ -338,7 +389,7 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 // GetLernData ...
 func GetLernData(_id string, username string) (LernData, error) {
 	// Data for sidebar
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return LernData{}, err
 	}
@@ -427,7 +478,7 @@ func GetLernData(_id string, username string) (LernData, error) {
 // GetLern2Data ...
 func GetLern2Data(kastenid string, karteid string, username string) (LernData, error) {
 	// Data for sidebar
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return LernData{}, err
 	}
@@ -526,12 +577,12 @@ func GetProfilData(username string) (ProfilData, error) {
 		return ProfilData{}, err
 	}
 
-	anzEigeneKarten, err := getAnzEigeneKarten(username)
+	eigeneKarten, err := GetEigeneKarten(username)
 	if err != nil {
 		return ProfilData{}, err
 	}
 
-	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return ProfilData{}, err
 	}
@@ -540,7 +591,7 @@ func GetProfilData(username string) (ProfilData, error) {
 		UserName:               user.Username,
 		Email:                  user.Email,
 		AnzEigeneKaesten:       strconv.Itoa(len(anzEigeneKaesten)),
-		AnzEigeneKarten:        anzEigeneKarten,
+		AnzEigeneKarten:        strconv.Itoa(len(eigeneKarten)),
 		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
 		CreatedAt:              user.CreatedAt,
 	}
@@ -553,6 +604,9 @@ func GetProfilData(username string) (ProfilData, error) {
 // ---------------------------------------------------------------------------
 
 func getFortschritt(karten []Karteikarte) string {
+	if len(karten) == 0 {
+		return strconv.Itoa(0)
+	}
 	// Loop through all karten and count how many karten are in each fach
 	fach0 := 0
 	fach1 := 0
@@ -619,19 +673,19 @@ func getEigeneKaesten(username string) ([]Karteikasten, error) {
 	return retKaesten, nil
 }
 
-func getAnzEigeneKarten(username string) (string, error) {
+func GetEigeneKarten(username string) ([]Karteikarte, error) {
 	userInDB, err := GetUserByUsername(username)
 	if err != nil {
-		return "", err
+		return []Karteikarte{}, err
 	}
 
 	kaesten, err := GetAllKasten()
 	if err != nil {
-		return "", err
+		return []Karteikarte{}, err
 	}
 	var decodedKaesten []Karteikasten
 	mapstructure.Decode(kaesten, &decodedKaesten)
-	// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+	// Add _id to decodedKaesten, because mapstructure.Decode doesn't do it
 	index := 0
 	for _, v := range kaesten {
 		decodedKaesten[index].Id = v["_id"].(string)
@@ -647,23 +701,30 @@ func getAnzEigeneKarten(username string) (string, error) {
 
 	karten, err := GetAllKarten()
 	if err != nil {
-		return "", err
+		return []Karteikarte{}, err
 	}
 
-	retWert := 0
 	var decodedKarten []Karteikarte
 	mapstructure.Decode(karten, &decodedKarten)
+	// Add _id to decodedKarten, because mapstructure.Decode doesn't do it
+	index = 0
+	for _, v := range karten {
+		decodedKarten[index].Id = v["_id"].(string)
+		index++
+	}
+
+	var retKarten []Karteikarte
 	for i := 0; i < len(karten); i++ {
 		for j := 0; j < len(kaestenFromUser); j++ {
 			if kaestenFromUser[j].Id == decodedKarten[i].KastenID {
-				retWert++
+				retKarten = append(retKarten, decodedKarten[i])
 			}
 		}
 	}
-	return strconv.Itoa(retWert), nil
+	return retKarten, nil
 }
 
-func getAllOeffentlicheKaesten() ([]Karteikasten, error) {
+func GetAlleOeffentlichenKaesten() ([]Karteikasten, error) {
 
 	kaesten, err := GetAllKasten()
 	if err != nil {

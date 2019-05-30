@@ -731,6 +731,10 @@ strong {
   width: 40px;
   height: 80px;
 }
+
+.whiteLink {
+  color: white !important;
+}
 /* ID's to change hexagon background color dynamically */
 #hex1,
 #hex2 {

@@ -33,13 +33,7 @@ func AddKasten(w http.ResponseWriter, r *http.Request) {
 
 	err = kasten.Add()
 	if err != nil {
-		data := struct {
-			ErrorMsg string
-		}{
-			ErrorMsg: err.Error(),
-		}
-		tmpl.ExecuteTemplate(w, "register.tmpl", data)
-	} else {
-		tmpl.ExecuteTemplate(w, "edit2.tmpl", nil)
+		fmt.Println(err)
 	}
+	Edit2(w, r)
 }

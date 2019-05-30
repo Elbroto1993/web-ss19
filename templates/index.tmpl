@@ -28,10 +28,10 @@
     />
     <title>BrainTrain</title>
   </head>
-
+  {{if .ErrorMsg}}<script>alert({{.ErrorMsg}})</script>{{end}}
   <body>
   <!-- Create header and sidebar for logged in user -->
-  {{if .LoggedIn}}
+  {{if eq "true" .LoggedIn}}
     <!-- Header -->
     <header>
       <a href="index" class="logo">
