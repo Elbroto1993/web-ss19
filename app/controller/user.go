@@ -3,6 +3,7 @@ package controller
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"fmt"
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"net/http"
 	"time"
@@ -42,6 +43,44 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "register.tmpl", data)
 	} else {
 		tmpl.ExecuteTemplate(w, "index.tmpl", nil)
+	}
+}
+
+// DeleteUser controller
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+	username := session.Values["username"].(string)
+
+	err := model.DeleteUser(username)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}
+
+// UpdateUser controller
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+	username := session.Values["username"].(string)
+	password := r.FormValue("password")
+	email := r.FormValue("email")
+
+	user := model.User{}
+	user.Username = username
+	user.Password = password
+	user.Email = email
+
+	err := user.Update()
+	if err != nil {
+		data := struct {
+			ErrorMsg string
+		}{
+			ErrorMsg: err.Error(),
+		}
+		tmpl.ExecuteTemplate(w, "profil.tmpl", data)
+	} else {
+		tmpl.ExecuteTemplate(w, "profil.tmpl", nil)
 	}
 }
 

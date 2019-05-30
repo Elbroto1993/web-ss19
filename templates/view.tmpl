@@ -34,6 +34,10 @@
     <title>BrainTrain</title>
   </head>
 
+  <!-- GLOBAL HELPER VARIABLES  -->
+  {{$SelectedKarteID := .SelectedKarte.Id}}
+  <!-- ________________________ -->
+
   <body>
       <!-- Create header and sidebar for logged in user -->
   {{if .LoggedIn}}
@@ -95,7 +99,7 @@
               />Karteikasten<small
                 class="karteiZaehler"
                 id="indexKastenCounterPublic"
-                >0</small
+                >{{.AnzOeffentlicheKaesten}}</small
               ></a
             >
           </li>
@@ -107,7 +111,7 @@
               height="30"
               width="30"
             />
-            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">0</small></a
+            Meine Karteien<small class="karteiZaehler" id="indexKartenCounterUser">{{.AnzEigeneKaesten}}</small></a
           >
           </li>
           <li class="menuItems">
@@ -187,7 +191,7 @@
               />Karteikasten<small
                 class="karteiZaehler"
                 id="indexKastenCounterPublic"
-                >0</small
+                >{{.AnzOeffentlicheKaesten}}</small
               ></a
             >
           </li>
@@ -240,7 +244,7 @@
           <div class="viewCardList">
             <div class="viewCardListGrid" id="viewListKarten">
             {{range $i, $a := .Karten}}
-              <div class="card">
+              <div class="card {{if eq .Id $SelectedKarteID}}viewBackgroundGreen{{end}}">
                 <p>#{{$i}}</p>
                 <a href='view?_kastenid={{.KastenID}}&_karteid={{.Id}}'><button class="noStyleButton karteButton">
                   {{.Titel}}

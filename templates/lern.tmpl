@@ -46,22 +46,26 @@
           <i class="fas fa-bars"></i>
         </button>
       </nav>
+      <!-- Inputfelder zum anmelden/registrieren -->
       <div class="logout">
-        <button class="btnYellow newKarteiButton" id="newKarteiButton">
+        <a href="edit"><button class="btnYellow newKarteiButton" id="newKarteiButton">
           Neue Kartei
-        </button>
+        </button></a>
         <div class="headerUserInfo">
-          <h4 id="logoutUsername">Max Mustermann</h4>
-          <button class="logoutButton" id="logoutButton">
-            <small>Logout</small>
+          <h4 id="logoutUsername">{{.UserName}}</h4>
+          <form action="/logout" method="POST">
+            <button class="logoutButton" id="logoutButton">
+          </form>
+           <small>Logout</small>
           </button>
         </div>
-        <img
+          <img
           src="static/images/defaultUser.png"
           alt="gray default male profile picture"
           height="30"
           width="30"
-        />
+          />
+        </div>
       </div>
     </header>
     <!-- Sidebar -->
@@ -89,7 +93,7 @@
               />Karteikasten<small
                 class="karteiZaehler"
                 id="indexKastenCounterPublic"
-                >8</small
+                >{{.AnzOeffentlicheKaesten}}</small
               ></a
             >
           </li>
@@ -104,7 +108,7 @@
               Meine Karteien<small
                 class="karteiZaehler"
                 id="indexKartenCounterUser"
-                >8</small
+                >{{.AnzEigeneKaesten}}</small
               ></a
             >
           </li>

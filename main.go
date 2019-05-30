@@ -22,6 +22,8 @@ func main() {
 	http.HandleFunc("/view", controller.View)
 
 	http.HandleFunc("/add-user", controller.AddUser)
+	http.HandleFunc("/delete-user", controller.DeleteUser)
+	http.HandleFunc("/update-user", controller.UpdateUser)
 	http.HandleFunc("/authenticate-user", controller.AuthenticateUser)
 	http.HandleFunc("/logout", controller.Logout)
 

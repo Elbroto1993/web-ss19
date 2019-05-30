@@ -15,17 +15,22 @@ func init() {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	data, err := model.GetIndexData()
+	userName := ""
+	var loggedIn string
+	// If user is logged in add loggedin and username to struct
+	session, err := store.Get(r, "session")
+	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
+		loggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
+		userName = session.Values["username"].(string)
+	}
+
+	data, err := model.GetIndexData(userName)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// If user is logged in add loggedin and username to struct
-	session, err := store.Get(r, "session")
-	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
-		data.LoggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
-		data.UserName = session.Values["username"].(string)
-	}
+	data.LoggedIn = loggedIn
+	data.UserName = userName
 
 	tmpl.ExecuteTemplate(w, "index.tmpl", data)
 }
@@ -48,80 +53,113 @@ func Edit2(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "edit2.tmpl", nil)
 }
 func Karteikasten(w http.ResponseWriter, r *http.Request) {
-	kaesten, err := model.GetKarteikastenData()
+	userName := ""
+	var loggedIn string
+	// If user is logged in add loggedin and username to struct
+	session, err := store.Get(r, "session")
+	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
+		loggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
+		userName = session.Values["username"].(string)
+	}
+
+	kaesten, err := model.GetKarteikastenData(userName)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	// If user is logged in add loggedin and username to struct
-	session, err := store.Get(r, "session")
-	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
-		kaesten.LoggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
-		kaesten.UserName = session.Values["username"].(string)
-	}
+	kaesten.UserName = userName
+	kaesten.LoggedIn = loggedIn
 
 	tmpl.ExecuteTemplate(w, "karteikasten.tmpl", kaesten)
 }
 func Lern(w http.ResponseWriter, r *http.Request) {
-	_id := r.FormValue("_kastenid")
-	data, err := model.GetLernData(_id)
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	// Add username from session to struct
 	session, err := store.Get(r, "session")
 	if err != nil {
 		fmt.Println(err)
 	}
-	data.UserName = session.Values["username"].(string)
+	userName := session.Values["username"].(string)
+
+	_id := r.FormValue("_kastenid")
+	data, err := model.GetLernData(_id, userName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	data.UserName = userName
 
 	tmpl.ExecuteTemplate(w, "lern.tmpl", data)
 }
 func Lern2(w http.ResponseWriter, r *http.Request) {
 	karteid := r.FormValue("_karteid")
 	kastenid := r.FormValue("_kastenid")
-	data, err := model.GetLern2Data(kastenid, karteid)
-	if err != nil {
-		fmt.Println(err)
-	}
 
 	// Add username from session to struct
 	session, err := store.Get(r, "session")
 	if err != nil {
 		fmt.Println(err)
 	}
-	data.UserName = session.Values["username"].(string)
+	userName := session.Values["username"].(string)
+
+	data, err := model.GetLern2Data(kastenid, karteid, userName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	data.UserName = userName
 
 	tmpl.ExecuteTemplate(w, "lern2.tmpl", data)
 }
 func Meinekarteien(w http.ResponseWriter, r *http.Request) {
-	kaesten, err := model.GetKarteikastenData()
+	kaesten, err := model.GetKarteikastenData("")
 	if err != nil {
 		fmt.Println(err)
 	}
 	tmpl.ExecuteTemplate(w, "meinekarteien.tmpl", kaesten)
 }
 func Profil(w http.ResponseWriter, r *http.Request) {
-	tmpl.ExecuteTemplate(w, "profil.tmpl", nil)
-}
-func Register(w http.ResponseWriter, r *http.Request) {
-	tmpl.ExecuteTemplate(w, "register.tmpl", nil)
-}
-func View(w http.ResponseWriter, r *http.Request) {
-	kastenid := r.FormValue("_kastenid")
-	karteid := r.FormValue("_karteid")
-	viewData, err := model.GetViewData(kastenid, karteid)
+
+	session, err := store.Get(r, "session")
+	if err != nil {
+		fmt.Println(err)
+	}
+	userName := session.Values["username"].(string)
+
+	data, err := model.GetProfilData(userName)
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	tmpl.ExecuteTemplate(w, "profil.tmpl", data)
+}
+func Register(w http.ResponseWriter, r *http.Request) {
+	data, err := model.GetRegisterData()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tmpl.ExecuteTemplate(w, "register.tmpl", data)
+}
+func View(w http.ResponseWriter, r *http.Request) {
+	kastenid := r.FormValue("_kastenid")
+	karteid := r.FormValue("_karteid")
+
+	userName := ""
+	var loggedIn string
 	// If user is logged in add loggedin and username to struct
 	session, err := store.Get(r, "session")
 	if session.Values["authenticated"] != nil && session.Values["username"] != nil {
-		viewData.LoggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
-		viewData.UserName = session.Values["username"].(string)
+		loggedIn = strconv.FormatBool(session.Values["authenticated"].(bool))
+		userName = session.Values["username"].(string)
 	}
+
+	viewData, err := model.GetViewData(kastenid, karteid, userName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	viewData.LoggedIn = loggedIn
+	viewData.UserName = userName
 
 	tmpl.ExecuteTemplate(w, "view.tmpl", viewData)
 }

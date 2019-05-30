@@ -6,20 +6,8 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
-	// "time"
+	"time"
 )
-
-// User Struct
-// type User struct {
-// 	Id        string    `json:"_id"`
-// 	Rev       string    `json:"_rev"`
-// 	Username  string    `json:"username"`
-// 	Password  string    `json:"password"`
-// 	LoggedIn  string    `json:"loggedin"`
-// 	Email     string    `json:"email"`
-// 	CreatedAt time.Time `json:"createdat"`
-// 	couchdb.Document
-// }
 
 // Karteikarte Struct
 type Karteikarte struct {
@@ -35,69 +23,87 @@ type Karteikarte struct {
 
 // IndexData Struct
 type IndexData struct {
-	AnzUser   string `json:"anzuser"`
-	AnzKasten string `json:"anzkasten"`
-	AnzKarten string `json:"anzkarten"`
-	LoggedIn  string `json:"loggedin"`
-	UserName  string `json:"username"`
+	AnzUser                string `json:"anzuser"`
+	AnzKasten              string `json:"anzkasten"`
+	AnzKarten              string `json:"anzkarten"`
+	LoggedIn               string `json:"loggedin"`
+	UserName               string `json:"username"`
+	AnzEigeneKaesten       string `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
 }
 
 // KarteikastenData Struct
 type KarteikastenData struct {
-	Id        string         `json:"id"`
-	LoggedIn  string         `json:"loggedin"`
-	UserName  string         `json:"username"`
-	AnzKarten string         `json:"anzkarten"`
-	Kaesten   []Karteikasten `json:"kaesten"`
-	// Kategorie       string `json:"kategorie"`
-	// Titel           string `json:"titel"`
-	// Beschreibung    string `json:"beschreibung"`
-	// Private         string `json:"private"`
-	// CreatedByUserID string `json:"createdByUserId"`
-	// UserID          string `json:"userid"`
-	// Ueberkategorie  string `json:"ueberkategorie"`
+	Id                     string         `json:"id"`
+	LoggedIn               string         `json:"loggedin"`
+	UserName               string         `json:"username"`
+	AnzEigeneKaesten       string         `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string         `json:"anzoeffentlichekaesten"`
+	Kaesten                []Karteikasten `json:"kaesten"`
 }
 
 // ViewData Struct
 type ViewData struct {
-	Kategorie       string        `json:"kategorie"`
-	Titel           string        `json:"titel"`
-	Beschreibung    string        `json:"beschreibung"`
-	Fortschritt     string        `json:"fortschritt"`
-	Private         string        `json:"private"`
-	CreatedByUserID string        `json:"createdByUserId"`
-	UserID          string        `json:"userid"`
-	Ueberkategorie  string        `json:"ueberkategorie"`
-	AnzKarten       string        `json:"anzkarten"`
-	UserName        string        `json:"username"`
-	LoggedIn        string        `json:"loggedin"`
-	SelectedKarte   Karteikarte   `json:"selectedkarte"`
-	Karten          []Karteikarte `json:"karten"`
+	Kategorie              string        `json:"kategorie"`
+	Titel                  string        `json:"titel"`
+	Beschreibung           string        `json:"beschreibung"`
+	Fortschritt            string        `json:"fortschritt"`
+	Private                string        `json:"private"`
+	CreatedByUserID        string        `json:"createdByUserId"`
+	UserID                 string        `json:"userid"`
+	Ueberkategorie         string        `json:"ueberkategorie"`
+	AnzKarten              string        `json:"anzkarten"`
+	UserName               string        `json:"username"`
+	LoggedIn               string        `json:"loggedin"`
+	AnzEigeneKaesten       string        `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string        `json:"anzoeffentlichekaesten"`
+	SelectedKarte          Karteikarte   `json:"selectedkarte"`
+	Karten                 []Karteikarte `json:"karten"`
 }
 
 // LernData Struct
 type LernData struct {
-	Kategorie       string      `json:"kategorie"`
-	Titel           string      `json:"titel"`
-	Beschreibung    string      `json:"beschreibung"`
-	Fortschritt     string      `json:"fortschritt"`
-	Private         string      `json:"private"`
-	CreatedByUserID string      `json:"createdByUserId"`
-	UserID          string      `json:"userid"`
-	Ueberkategorie  string      `json:"ueberkategorie"`
-	AnzKarten       string      `json:"anzkarten"`
-	AnzFachZero     string      `json:"anzfachzero"`
-	AnzFachOne      string      `json:"anzfachone"`
-	AnzFachTwo      string      `json:"anzfachtwo"`
-	AnzFachThree    string      `json:"anzfachthree"`
-	AnzFachFour     string      `json:"anzfachfour"`
-	UserName        string      `json:"username"`
-	Karte           Karteikarte `json:"karte"`
+	Kategorie              string      `json:"kategorie"`
+	Titel                  string      `json:"titel"`
+	Beschreibung           string      `json:"beschreibung"`
+	Fortschritt            string      `json:"fortschritt"`
+	Private                string      `json:"private"`
+	CreatedByUserID        string      `json:"createdByUserId"`
+	UserID                 string      `json:"userid"`
+	Ueberkategorie         string      `json:"ueberkategorie"`
+	AnzKarten              string      `json:"anzkarten"`
+	AnzFachZero            string      `json:"anzfachzero"`
+	AnzFachOne             string      `json:"anzfachone"`
+	AnzFachTwo             string      `json:"anzfachtwo"`
+	AnzFachThree           string      `json:"anzfachthree"`
+	AnzFachFour            string      `json:"anzfachfour"`
+	UserName               string      `json:"username"`
+	AnzEigeneKaesten       string      `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string      `json:"anzoeffentlichekaesten"`
+	Karte                  Karteikarte `json:"karte"`
 }
 
 // EditData Struct
 type EditData struct {
-	UserName string `json:"username"`
+	UserName               string `json:"username"`
+	AnzEigeneKaesten       string `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
+}
+
+// ProfilData Struct
+type ProfilData struct {
+	UserName               string    `json:"username"`
+	Email                  string    `json:"email"`
+	AnzEigeneKaesten       string    `json:"anzeigenekasten"`
+	AnzOeffentlicheKaesten string    `json:"anzoeffentlichekaesten"`
+	AnzEigeneKarten        string    `json:"anzeigenekarten"`
+	CreatedAt              time.Time `json:"createdat"`
+}
+
+// RegisterData struct
+type RegisterData struct {
+	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
+	ErrorMsg               string `json:"errormsg"`
 }
 
 // CouchDB Connection
@@ -163,7 +169,7 @@ func GetAllUser() ([]map[string]interface{}, error) {
 }
 
 // GetIndexData ...
-func GetIndexData() (IndexData, error) {
+func GetIndexData(username string) (IndexData, error) {
 	allUser, err := GetAllUser()
 	if err != nil {
 		return IndexData{}, err
@@ -176,28 +182,57 @@ func GetIndexData() (IndexData, error) {
 	if err != nil {
 		return IndexData{}, err
 	}
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return IndexData{}, err
+	}
+	var eigeneKaesten []Karteikasten
+	if username != "" {
+		eigeneKaesten, err = getEigeneKaesten(username)
+		if err != nil {
+			return IndexData{}, err
+		}
+	}
 	index := IndexData{
-		AnzUser:   strconv.Itoa(len(allUser)),
-		AnzKasten: strconv.Itoa(len(allKasten)),
-		AnzKarten: strconv.Itoa(len(allKarten)),
+		AnzUser:                strconv.Itoa(len(allUser)),
+		AnzKasten:              strconv.Itoa(len(allKasten)),
+		AnzKarten:              strconv.Itoa(len(allKarten)),
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
 	}
 	return index, nil
 }
 
+// GetRegisterData ...
+func GetRegisterData() (RegisterData, error) {
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return RegisterData{}, err
+	}
+
+	registerData := RegisterData{
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		ErrorMsg:               "",
+	}
+
+	return registerData, nil
+}
+
 // GetKarteikastenData ...
-func GetKarteikastenData() (KarteikastenData, error) {
-	// Get all Kaesten and decode them
-	allKasten, err := GetAllKasten()
+func GetKarteikastenData(username string) (KarteikastenData, error) {
+	// Get all oeffentliche Kaesten and decode them
+	alleOeffentlichenKaesten, err := getAllOeffentlicheKaesten()
 	if err != nil {
 		return KarteikastenData{}, err
 	}
-	var decodedKaesten []Karteikasten
-	mapstructure.Decode(allKasten, &decodedKaesten)
-	// Add _id to decodedKaesten, because mapstructure.Decode doesn't do it
-	index := 0
-	for _, v := range allKasten {
-		decodedKaesten[index].Id = v["_id"].(string)
-		index++
+
+	// Get all eigene kaesten if logged in
+	var eigeneKaesten []Karteikasten
+	if username != "" {
+		eigeneKaesten, err = getEigeneKaesten(username)
+		if err != nil {
+			return KarteikastenData{}, err
+		}
 	}
 
 	// Get all Karten and decode them
@@ -208,22 +243,37 @@ func GetKarteikastenData() (KarteikastenData, error) {
 	var decodedKarten []Karteikarte
 	mapstructure.Decode(allKarten, &decodedKarten)
 	// Fill AnzKarten from Karteikasten with values
-	for i := 0; i < len(decodedKaesten); i++ {
+	for i := 0; i < len(alleOeffentlichenKaesten); i++ {
 		countKarten := 0
 		for j := 0; j < len(decodedKarten); j++ {
-			if string(decodedKaesten[i].Id) == decodedKarten[j].KastenID {
+			if string(alleOeffentlichenKaesten[i].Id) == decodedKarten[j].KastenID {
 				countKarten++
 			}
 		}
-		decodedKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		alleOeffentlichenKaesten[i].AnzKarten = strconv.Itoa(countKarten)
 	}
 	var retValue KarteikastenData
-	retValue.Kaesten = decodedKaesten
+	retValue.Kaesten = alleOeffentlichenKaesten
+	retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
+	retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
 	return retValue, nil
 }
 
 // GetViewData ...
-func GetViewData(kastenid string, karteid string) (ViewData, error) {
+func GetViewData(kastenid string, karteid string, username string) (ViewData, error) {
+	// Data for sidebar
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return ViewData{}, err
+	}
+	var eigeneKaesten []Karteikasten
+	if username != "" {
+		eigeneKaesten, err = getEigeneKaesten(username)
+		if err != nil {
+			return ViewData{}, err
+		}
+	}
+
 	kasten, err := btDB.Get(kastenid, nil)
 	if err != nil {
 		return ViewData{}, err
@@ -268,23 +318,38 @@ func GetViewData(kastenid string, karteid string) (ViewData, error) {
 	}
 
 	viewData := ViewData{
-		Kategorie:       decodeKasten.Kategorie,
-		Titel:           decodeKasten.Titel,
-		Beschreibung:    decodeKasten.Beschreibung,
-		Fortschritt:     getFortschritt(returnKarten),
-		Private:         decodeKasten.Private,
-		CreatedByUserID: decodeKasten.CreatedByUserID,
-		UserID:          decodeKasten.UserID,
-		Ueberkategorie:  decodeKasten.Ueberkategorie,
-		AnzKarten:       strconv.Itoa(anzKarten),
-		SelectedKarte:   decodeKarte,
-		Karten:          returnKarten,
+		Kategorie:              decodeKasten.Kategorie,
+		Titel:                  decodeKasten.Titel,
+		Beschreibung:           decodeKasten.Beschreibung,
+		Fortschritt:            getFortschritt(returnKarten),
+		Private:                decodeKasten.Private,
+		CreatedByUserID:        decodeKasten.CreatedByUserID,
+		UserID:                 decodeKasten.UserID,
+		Ueberkategorie:         decodeKasten.Ueberkategorie,
+		AnzKarten:              strconv.Itoa(anzKarten),
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
+		SelectedKarte:          decodeKarte,
+		Karten:                 returnKarten,
 	}
 	return viewData, nil
 }
 
 // GetLernData ...
-func GetLernData(_id string) (LernData, error) {
+func GetLernData(_id string, username string) (LernData, error) {
+	// Data for sidebar
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return LernData{}, err
+	}
+	var eigeneKaesten []Karteikasten
+	if username != "" {
+		eigeneKaesten, err = getEigeneKaesten(username)
+		if err != nil {
+			return LernData{}, err
+		}
+	}
+
 	kasten, err := btDB.Get(_id, nil)
 	if err != nil {
 		return LernData{}, err
@@ -338,27 +403,42 @@ func GetLernData(_id string) (LernData, error) {
 	}
 
 	lernData := LernData{
-		Kategorie:       decodeKasten.Kategorie,
-		Titel:           decodeKasten.Titel,
-		Beschreibung:    decodeKasten.Beschreibung,
-		Fortschritt:     getFortschritt(returnKarten),
-		Private:         decodeKasten.Private,
-		CreatedByUserID: decodeKasten.CreatedByUserID,
-		UserID:          decodeKasten.UserID,
-		Ueberkategorie:  decodeKasten.Ueberkategorie,
-		AnzKarten:       strconv.Itoa(anzKarten),
-		AnzFachZero:     strconv.Itoa(fach0),
-		AnzFachOne:      strconv.Itoa(fach1),
-		AnzFachTwo:      strconv.Itoa(fach2),
-		AnzFachThree:    strconv.Itoa(fach3),
-		AnzFachFour:     strconv.Itoa(fach4),
-		Karte:           retKarte,
+		Kategorie:              decodeKasten.Kategorie,
+		Titel:                  decodeKasten.Titel,
+		Beschreibung:           decodeKasten.Beschreibung,
+		Fortschritt:            getFortschritt(returnKarten),
+		Private:                decodeKasten.Private,
+		CreatedByUserID:        decodeKasten.CreatedByUserID,
+		UserID:                 decodeKasten.UserID,
+		Ueberkategorie:         decodeKasten.Ueberkategorie,
+		AnzKarten:              strconv.Itoa(anzKarten),
+		AnzFachZero:            strconv.Itoa(fach0),
+		AnzFachOne:             strconv.Itoa(fach1),
+		AnzFachTwo:             strconv.Itoa(fach2),
+		AnzFachThree:           strconv.Itoa(fach3),
+		AnzFachFour:            strconv.Itoa(fach4),
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
+		Karte:                  retKarte,
 	}
 	return lernData, nil
 }
 
 // GetLern2Data ...
-func GetLern2Data(kastenid string, karteid string) (LernData, error) {
+func GetLern2Data(kastenid string, karteid string, username string) (LernData, error) {
+	// Data for sidebar
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return LernData{}, err
+	}
+	var eigeneKaesten []Karteikasten
+	if username != "" {
+		eigeneKaesten, err = getEigeneKaesten(username)
+		if err != nil {
+			return LernData{}, err
+		}
+	}
+
 	kasten, err := btDB.Get(kastenid, nil)
 	if err != nil {
 		return LernData{}, err
@@ -408,21 +488,23 @@ func GetLern2Data(kastenid string, karteid string) (LernData, error) {
 	}
 
 	lernData := LernData{
-		Kategorie:       decodeKasten.Kategorie,
-		Titel:           decodeKasten.Titel,
-		Beschreibung:    decodeKasten.Beschreibung,
-		Fortschritt:     getFortschritt(tempKarten),
-		Private:         decodeKasten.Private,
-		CreatedByUserID: decodeKasten.CreatedByUserID,
-		UserID:          decodeKasten.UserID,
-		Ueberkategorie:  decodeKasten.Ueberkategorie,
-		AnzKarten:       strconv.Itoa(anzKarten),
-		AnzFachZero:     strconv.Itoa(fach0),
-		AnzFachOne:      strconv.Itoa(fach1),
-		AnzFachTwo:      strconv.Itoa(fach2),
-		AnzFachThree:    strconv.Itoa(fach3),
-		AnzFachFour:     strconv.Itoa(fach4),
-		Karte:           decodeKarte,
+		Kategorie:              decodeKasten.Kategorie,
+		Titel:                  decodeKasten.Titel,
+		Beschreibung:           decodeKasten.Beschreibung,
+		Fortschritt:            getFortschritt(tempKarten),
+		Private:                decodeKasten.Private,
+		CreatedByUserID:        decodeKasten.CreatedByUserID,
+		UserID:                 decodeKasten.UserID,
+		Ueberkategorie:         decodeKasten.Ueberkategorie,
+		AnzKarten:              strconv.Itoa(anzKarten),
+		AnzFachZero:            strconv.Itoa(fach0),
+		AnzFachOne:             strconv.Itoa(fach1),
+		AnzFachTwo:             strconv.Itoa(fach2),
+		AnzFachThree:           strconv.Itoa(fach3),
+		AnzFachFour:            strconv.Itoa(fach4),
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
+		Karte:                  decodeKarte,
 	}
 	return lernData, nil
 }
@@ -431,6 +513,39 @@ func GetLern2Data(kastenid string, karteid string) (LernData, error) {
 func GetEditData() (EditData, error) {
 	editData := EditData{}
 	return editData, nil
+}
+
+func GetProfilData(username string) (ProfilData, error) {
+	user, err := GetUserByUsername(username)
+	if err != nil {
+		return ProfilData{}, err
+	}
+
+	anzEigeneKaesten, err := getEigeneKaesten(username)
+	if err != nil {
+		return ProfilData{}, err
+	}
+
+	anzEigeneKarten, err := getAnzEigeneKarten(username)
+	if err != nil {
+		return ProfilData{}, err
+	}
+
+	anzOeffentlicheKaesten, err := getAllOeffentlicheKaesten()
+	if err != nil {
+		return ProfilData{}, err
+	}
+
+	profilData := ProfilData{
+		UserName:               user.Username,
+		Email:                  user.Email,
+		AnzEigeneKaesten:       strconv.Itoa(len(anzEigeneKaesten)),
+		AnzEigeneKarten:        anzEigeneKarten,
+		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
+		CreatedAt:              user.CreatedAt,
+	}
+
+	return profilData, nil
 }
 
 // ---------------------------------------------------------------------------
@@ -469,7 +584,107 @@ func getFortschritt(karten []Karteikarte) string {
 	temp += 2 * fach2
 	temp += 3 * fach3
 	temp += 4 * fach4
-	retWert := math.Round(float64((temp / (4 * len(karten))) * 100))
-
+	var retWert float64
+	retWert = math.Floor(float64((float64(temp) / (float64(4) * float64(len(karten))) * float64(100))))
 	return strconv.Itoa(int(retWert))
+}
+
+func getEigeneKaesten(username string) ([]Karteikasten, error) {
+	userInDB, err := GetUserByUsername(username)
+	if err != nil {
+		return []Karteikasten{}, err
+	}
+
+	kaesten, err := GetAllKasten()
+	if err != nil {
+		return []Karteikasten{}, err
+	}
+
+	var decodedKaesten []Karteikasten
+	mapstructure.Decode(kaesten, &decodedKaesten)
+	// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+	index := 0
+	for _, v := range kaesten {
+		decodedKaesten[index].Id = v["_id"].(string)
+		index++
+	}
+
+	var retKaesten []Karteikasten
+	mapstructure.Decode(kaesten, &decodedKaesten)
+	for i := 0; i < len(kaesten); i++ {
+		if decodedKaesten[i].UserID == userInDB.Id {
+			retKaesten = append(retKaesten, decodedKaesten[i])
+		}
+	}
+	return retKaesten, nil
+}
+
+func getAnzEigeneKarten(username string) (string, error) {
+	userInDB, err := GetUserByUsername(username)
+	if err != nil {
+		return "", err
+	}
+
+	kaesten, err := GetAllKasten()
+	if err != nil {
+		return "", err
+	}
+	var decodedKaesten []Karteikasten
+	mapstructure.Decode(kaesten, &decodedKaesten)
+	// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+	index := 0
+	for _, v := range kaesten {
+		decodedKaesten[index].Id = v["_id"].(string)
+		index++
+	}
+
+	var kaestenFromUser []Karteikasten
+	for i := 0; i < len(kaesten); i++ {
+		if decodedKaesten[i].UserID == userInDB.Id {
+			kaestenFromUser = append(kaestenFromUser, decodedKaesten[i])
+		}
+	}
+
+	karten, err := GetAllKarten()
+	if err != nil {
+		return "", err
+	}
+
+	retWert := 0
+	var decodedKarten []Karteikarte
+	mapstructure.Decode(karten, &decodedKarten)
+	for i := 0; i < len(karten); i++ {
+		for j := 0; j < len(kaestenFromUser); j++ {
+			if kaestenFromUser[j].Id == decodedKarten[i].KastenID {
+				retWert++
+			}
+		}
+	}
+	return strconv.Itoa(retWert), nil
+}
+
+func getAllOeffentlicheKaesten() ([]Karteikasten, error) {
+
+	kaesten, err := GetAllKasten()
+	if err != nil {
+		return []Karteikasten{}, err
+	}
+
+	var decodedKaesten []Karteikasten
+	mapstructure.Decode(kaesten, &decodedKaesten)
+	// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+	index := 0
+	for _, v := range kaesten {
+		decodedKaesten[index].Id = v["_id"].(string)
+		index++
+	}
+
+	var retKaesten []Karteikasten
+	for i := 0; i < len(kaesten); i++ {
+		if decodedKaesten[i].Private == "false" {
+			retKaesten = append(retKaesten, decodedKaesten[i])
+		}
+	}
+
+	return retKaesten, nil
 }
