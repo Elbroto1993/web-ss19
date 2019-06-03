@@ -199,7 +199,7 @@
                 <strong>Selbst erstelle Karteikästen</strong>
               </h2>
               <div class="flex karteikastenLayout" id="ownKasten">
-              {{range .Kaesten}}
+              {{range .MeineKaesten}}
                 <div class="karteikastenCard" id="${listKasten[i].kastenid}">
                   <h3 class="karteikastenCardUnterkategorie">
                     {{.Ueberkategorie}}>{{.Kategorie}}
@@ -241,7 +241,7 @@
                       </p>
                       <div id='{{.Id}}'>
                         <button class="btnYellow lernenButtons"><a href='lern?_kastenid={{.Id}}' class="whiteLink">Lernen</a></button>
-                        <button class="btnGreen kastenEditButton"><a href='edit?_kastenid={{.Id}}' class="whiteLink">Bearbeiten</a></button>
+                        <button class="btnGreen kastenEditButton"><a href='edit2?_kastenid={{.Id}}' class="whiteLink">Bearbeiten</a></button>
                         <button class="btnRed kastenDeleteButton"><img src="static/icons/Delete.svg"></button>
                       </div>
                   </div>
@@ -253,7 +253,7 @@
                   <strong>Karteikästen anderer Nutzer</strong>
                 </h2>
                 <div class="flex karteikastenLayout" id="kastenFromOtherUser">
-                  {{range .Kaesten}}
+                  {{range .AndereKaesten}}
                 <div class="karteikastenCard" id="${listKasten[i].kastenid}">
                   <h3 class="karteikastenCardUnterkategorie">
                     {{.Ueberkategorie}}>{{.Kategorie}}

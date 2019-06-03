@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mitchellh/mapstructure"
 
 	couchdb "github.com/leesper/couchdb-golang"
 )
@@ -66,6 +67,38 @@ func (karteikasten Karteikasten) Update() (string, error) {
 	return karteikasten.Id, err
 }
 
+// Delete Kasten by Id
+func DeleteKasten(_id string) (err error) {
+
+	allKarten, err := GetAllKarten()
+	if err != nil {
+		return err
+	}
+	var decodeKarten []Karteikarte
+	mapstructure.Decode(allKarten, &decodeKarten)
+	// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+	index := 0
+	for _, v := range allKarten {
+		decodeKarten[index].Id = v["_id"].(string)
+		index++
+	}
+	// Delete all karten from kasten
+	for i := 0; i < len(decodeKarten); i++ {
+		if decodeKarten[i].KastenID == _id {
+			btDB.Delete(decodeKarten[i].Id)
+		}
+	}
+
+	// Delete kasten from DB
+	err = btDB.Delete(_id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return err
+}
+
+// GetKastenById ...
 func GetKastenById(kastenid string) (Karteikasten, error) {
 	query := `
 	{

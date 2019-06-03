@@ -151,7 +151,7 @@
               <h1><strong id="viewFortschritt">{{.Fortschritt}} %</strong></h1>
             </div>
             <div>
-              <button class="btnGreen" id="editKastenButton">Bearbeiten</button>
+              <button class="btnGreen" id="editKastenButton"><a href='edit?_kastenid={{.Id}}' class="whiteLink">Bearbeiten</a></button>
             </div>
             <div class="viewPositionHexagonHeader">
               <div class="hexagon hexagon2">
@@ -172,7 +172,7 @@
                 <div class="edit2Grid">
                   <p>#{{$i}}</p>
                   <h4 class="edit2Titel"><strong>{{.Titel}}</strong></h4>
-                  <div class="edit2Buttons" id="${data[i].karteid}">
+                  <div class="edit2Buttons" id="{{.Id}}">
                     <button class="btnGreen editButton"><a href='edit2?_kastenid={{.KastenID}}&_karteid={{.Id}}' class="whiteLink">Bearbeiten</a></button>
                     <button class="btnRed edit2deleteButton"><img src="static/icons/Delete.svg"></button>
                   </div>

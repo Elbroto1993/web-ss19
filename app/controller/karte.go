@@ -47,5 +47,20 @@ func AddOrUpdateKarte(w http.ResponseWriter, r *http.Request) {
 		}
 		json.NewEncoder(w).Encode(karteid)
 	}
+}
 
+// DeleteKarte controller
+func DeleteKarte(w http.ResponseWriter, r *http.Request) {
+	var _id string
+	err := json.NewDecoder(r.Body).Decode(&_id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if _id != "" {
+		err := model.DeleteKarte(_id)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	json.NewEncoder(w).Encode("Kasten geloescht")
 }

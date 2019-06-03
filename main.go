@@ -28,8 +28,10 @@ func main() {
 	http.HandleFunc("/logout", controller.Logout)
 
 	http.HandleFunc("/add-or-update-kasten", controller.AddOrUpdateKasten)
+	http.HandleFunc("/delete-kasten", controller.DeleteKasten)
 
 	http.HandleFunc("/add-or-update-karte", controller.AddOrUpdateKarte)
+	http.HandleFunc("/delete-karte", controller.DeleteKarte)
 
 	server.ListenAndServe()
 }

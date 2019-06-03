@@ -1,6 +1,7 @@
 package model
 
 import (
+	// "fmt"
 	couchdb "github.com/leesper/couchdb-golang"
 	"github.com/mitchellh/mapstructure"
 	"math"
@@ -38,7 +39,8 @@ type MeineKarteienData struct {
 	AnzEigeneKaesten       string         `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string         `json:"anzoeffentlichekaesten"`
 	Fortschritt            string         `json:"fortschritt"`
-	Kaesten                []Karteikasten `json:"kaesten"`
+	MeineKaesten           []Karteikasten `json:"meinekaesten"`
+	AndereKaesten          []Karteikasten `json:"anderekaesten"`
 }
 
 // ViewData Struct
@@ -91,6 +93,7 @@ type EditData struct {
 
 // Edit2Data Struct
 type Edit2Data struct {
+	Id                     string        `json:"id"`
 	Kategorie              string        `json:"kategorie"`
 	Titel                  string        `json:"titel"`
 	Fortschritt            string        `json:"fortschritt"`
@@ -276,13 +279,18 @@ func GetKarteikastenData(username string) (KarteikastenData, error) {
 
 // GetMeineKarteienData ...
 func GetMeineKarteienData(username string) (MeineKarteienData, error) {
+	user, err := GetUserByUsername(username)
+	if err != nil {
+		return MeineKarteienData{}, err
+	}
+
 	// Get all oeffentliche Kaesten and decode them
 	alleOeffentlichenKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return MeineKarteienData{}, err
 	}
 
-	eigeneKaesten, err := getEigeneKaesten(username)
+	allKaestenFromUser, err := getEigeneKaesten(username)
 	if err != nil {
 		return MeineKarteienData{}, err
 	}
@@ -295,22 +303,35 @@ func GetMeineKarteienData(username string) (MeineKarteienData, error) {
 	var decodedKarten []Karteikarte
 	mapstructure.Decode(allKarten, &decodedKarten)
 	// Fill AnzKarten from Karteikasten with values
-	for i := 0; i < len(eigeneKaesten); i++ {
+	for i := 0; i < len(allKaestenFromUser); i++ {
 		var tempKarten []Karteikarte
 		countKarten := 0
 		for j := 0; j < len(decodedKarten); j++ {
-			if string(eigeneKaesten[i].Id) == decodedKarten[j].KastenID {
+			if string(allKaestenFromUser[i].Id) == decodedKarten[j].KastenID {
 				tempKarten = append(tempKarten, decodedKarten[j])
 				countKarten++
 			}
 		}
-		eigeneKaesten[i].Fortschritt = getFortschritt(tempKarten)
-		eigeneKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		allKaestenFromUser[i].Fortschritt = getFortschritt(tempKarten)
+		allKaestenFromUser[i].AnzKarten = strconv.Itoa(countKarten)
 	}
+
+	var meineKaesten []Karteikasten
+	var andereKaesten []Karteikasten
+	// Split allKaestenFromUser in eigenen und andere kaesten
+	for i := 0; i < len(allKaestenFromUser); i++ {
+		if allKaestenFromUser[i].CreatedByUserID == user.Id {
+			meineKaesten = append(meineKaesten, allKaestenFromUser[i])
+		} else {
+			andereKaesten = append(andereKaesten, allKaestenFromUser[i])
+		}
+	}
+
 	var retValue MeineKarteienData
-	retValue.Kaesten = eigeneKaesten
+	retValue.MeineKaesten = meineKaesten
+	retValue.AndereKaesten = andereKaesten
 	retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
-	retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
+	retValue.AnzEigeneKaesten = strconv.Itoa(len(allKaestenFromUser))
 	return retValue, nil
 }
 
@@ -411,6 +432,7 @@ func GetLernData(_id string, username string) (LernData, error) {
 	}
 	var decodeKasten Karteikasten
 	mapstructure.Decode(kasten, &decodeKasten)
+	decodeKasten.Id = kasten["_id"].(string)
 	allKarten, err := GetAllKarten()
 	if err != nil {
 		return LernData{}, err
@@ -453,8 +475,9 @@ func GetLernData(_id string, username string) (LernData, error) {
 
 	////////// CHECK IF KASTEN IS ALREADY BEING LEARNED, ELSE ADD KASTEN TO USER ////////////
 	user, _ := GetUserByUsername(username)
-	if user.Id != _id {
+	if user.Id != decodeKasten.UserID {
 		kasten, _ := GetKastenById(_id)
+		kasten.Private = "true"
 		kasten.UserID = user.Id
 		newKastenId, _ := kasten.Add()
 		for i := 0; i < len(decodeKarten); i++ {
@@ -606,6 +629,7 @@ func GetEdit2Data(kastenid string, karteid string, username string) (Edit2Data, 
 	}
 	var decodeKasten Karteikasten
 	mapstructure.Decode(kasten, &decodeKasten)
+	decodeKasten.Id = kasten["_id"].(string)
 
 	// Only if a karte was selected
 	var decodeKarte Karteikarte
@@ -644,6 +668,7 @@ func GetEdit2Data(kastenid string, karteid string, username string) (Edit2Data, 
 	}
 
 	edit2Data := Edit2Data{
+		Id:                     decodeKasten.Id,
 		UserName:               username,
 		Kategorie:              decodeKasten.Kategorie,
 		Titel:                  decodeKasten.Titel,

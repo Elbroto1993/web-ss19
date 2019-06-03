@@ -58,5 +58,20 @@ func AddOrUpdateKasten(w http.ResponseWriter, r *http.Request) {
 		}
 		json.NewEncoder(w).Encode(kastenid)
 	}
+}
 
+// DeleteKasten controller
+func DeleteKasten(w http.ResponseWriter, r *http.Request) {
+	var _id string
+	err := json.NewDecoder(r.Body).Decode(&_id)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if _id != "" {
+		err := model.DeleteKasten(_id)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	json.NewEncoder(w).Encode("Kasten geloescht")
 }

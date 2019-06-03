@@ -23,6 +23,17 @@ function deleteKasten() {
   // Final delete button
   document
     .getElementById("profilFinallyDeleteButton")
-    .addEventListener("click", deleteProfile);
-  function deleteProfile() {}
+    .addEventListener("click", deleteKasten);
+  function deleteKasten() {
+    // Delete profile
+    let xhr = new XMLHttpRequest();
+    let url = "http://localhost:8080/delete-kasten";
+    xhr.open("DELETE", url, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        window.location.href = "http://localhost:8080/meinekarteien";
+      }
+    };
+    xhr.send(JSON.stringify(id));
+  }
 }

@@ -62,6 +62,18 @@ func (karteikarte Karteikarte) Update() (string, error) {
 	return karteikarte.Id, err
 }
 
+// Delete Karte by Id
+func DeleteKarte(_id string) (err error) {
+
+	// Delete karte from DB
+	err = btDB.Delete(_id)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return err
+}
+
 func GetKarteById(karteid string) (Karteikarte, error) {
 	query := `
 	{

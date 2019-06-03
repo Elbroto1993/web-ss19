@@ -27,7 +27,7 @@ let urlParam2 = function(name, w) {
 };
 let karteid = urlParam("_karteid");
 
-// Functions for buttons when no karte is selected
+// Functions for buttons when no karte is selected?????????????????
 document.getElementById("saveButton").addEventListener("click", saveKarte);
 function saveKarte() {
   // Get values from single card forms
@@ -55,35 +55,39 @@ function saveKarte() {
   xhr.send(data);
 }
 
-// function deleteKarte() {
-//   let id = this.parentNode.id;
-//   // Toggle modal for second delete button
-//   document.getElementById("profilDeleteModal").classList.add("is-active");
+let deleteButtons = document.getElementsByClassName("edit2deleteButton");
+for (let i = 0; i < deleteButtons.length; i++) {
+  deleteButtons[i].addEventListener("click", deleteKarte);
+}
+function deleteKarte() {
+  let id = this.parentNode.id;
+  // Toggle modal for second delete button
+  document.getElementById("profilDeleteModal").classList.add("is-active");
 
-//   document
-//     .getElementById("modal-close")
-//     .addEventListener("click", untoggleDeleteModal);
-//   document
-//     .getElementById("profilKeepButton")
-//     .addEventListener("click", untoggleDeleteModal);
+  document
+    .getElementById("modal-close")
+    .addEventListener("click", untoggleDeleteModal);
+  document
+    .getElementById("profilKeepButton")
+    .addEventListener("click", untoggleDeleteModal);
 
-//   function untoggleDeleteModal() {
-//     document.getElementById("profilDeleteModal").classList.remove("is-active");
-//   }
-//   // Final delete button
-//   document
-//     .getElementById("profilFinallyedit2deleteButton")
-//     .addEventListener("click", deleteKarte);
-//   function deleteKarte() {
-//     // Delete kasten
-//     let xhr = new XMLHttpRequest();
-//     let url = `http://localhost:8080/karteikarte/${id}`;
-//     xhr.open("DELETE", url, true);
-//     xhr.onreadystatechange = function() {
-//       if (xhr.readyState == 4 && xhr.status == 200) {
-//         location.reload();
-//       }
-//     };
-//     xhr.send(null);
-//   }
-// }
+  function untoggleDeleteModal() {
+    document.getElementById("profilDeleteModal").classList.remove("is-active");
+  }
+  // Final delete button
+  document
+    .getElementById("profilFinallyedit2deleteButton")
+    .addEventListener("click", deleteKarte);
+  function deleteKarte() {
+    // Delete kasten
+    let xhr = new XMLHttpRequest();
+    let url = `http://localhost:8080/delete-karte`;
+    xhr.open("DELETE", url, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        location.reload();
+      }
+    };
+    xhr.send(JSON.stringify(id));
+  }
+}
