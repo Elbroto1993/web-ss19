@@ -51,6 +51,7 @@ type ViewData struct {
 	Fortschritt            string        `json:"fortschritt"`
 	Private                string        `json:"private"`
 	CreatedByUserID        string        `json:"createdByUserId"`
+	CreatedByUsername      string        `json:"createdbyusername"`
 	UserID                 string        `json:"userid"`
 	Ueberkategorie         string        `json:"ueberkategorie"`
 	AnzKarten              string        `json:"anzkarten"`
@@ -357,6 +358,12 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 	var decodeKasten Karteikasten
 	mapstructure.Decode(kasten, &decodeKasten)
 
+	// Get username from createdByUserId
+	createdByUsername, err := btDB.Get(decodeKasten.UserID, nil)
+	if err != nil {
+		return ViewData{}, err
+	}
+
 	// Only if a karte was selected
 	var decodeKarte Karteikarte
 	if karteid != "" {
@@ -399,6 +406,7 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 		Beschreibung:           decodeKasten.Beschreibung,
 		Fortschritt:            getFortschritt(returnKarten),
 		Private:                decodeKasten.Private,
+		CreatedByUsername:      createdByUsername["username"].(string),
 		CreatedByUserID:        decodeKasten.CreatedByUserID,
 		UserID:                 decodeKasten.UserID,
 		Ueberkategorie:         decodeKasten.Ueberkategorie,

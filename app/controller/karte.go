@@ -30,11 +30,10 @@ func AddOrUpdateKarte(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(karteid)
 	} else {
 
-		karte, err := model.GetKarteById(_karteid)
+		tempkarte, err := model.GetKarteById(_karteid)
 		if err != nil {
 			fmt.Println(err)
 		}
-		var tempkarte model.Karteikarte
 
 		tempkarte.Titel = karte.Titel
 		tempkarte.Frage = karte.Frage
