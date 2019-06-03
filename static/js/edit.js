@@ -7,7 +7,7 @@ let urlParam = function(name, w) {
     val = w.location.search.match(rx);
   return !val ? "" : val[1];
 };
-let id = urlParam("Use_Id");
+let kastenid = urlParam("_kastenid");
 
 // STORE NEW KASTEN
 document
@@ -48,16 +48,18 @@ function newKasten(e) {
     kategorieError.classList.add("registerAlert");
   } else {
     let xhr = new XMLHttpRequest();
-    let url = "http://localhost:8080/add-kasten";
+    let url = "http://localhost:8080/add-or-update-kasten";
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onreadystatechange = function() {
       if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log(xhr.responseText);
+        let data = xhr.response.replace(/"/g, "");
+        window.location.href = `http://localhost:8080/edit2?_kastenid=${data}`;
       }
     };
     // Set data for POST
     let data = JSON.stringify({
+      _id: kastenid,
       titel: titel,
       kategorie: kategorie,
       beschreibung: beschreibung,

@@ -50,7 +50,21 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "edit.tmpl", data)
 }
 func Edit2(w http.ResponseWriter, r *http.Request) {
-	tmpl.ExecuteTemplate(w, "edit2.tmpl", nil)
+	kastenid := r.FormValue("_kastenid")
+	karteid := r.FormValue("_karteid")
+
+	session, err := store.Get(r, "session")
+	if err != nil {
+		fmt.Println(err)
+	}
+	userName := session.Values["username"].(string)
+
+	data, err := model.GetEdit2Data(kastenid, karteid, userName)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tmpl.ExecuteTemplate(w, "edit2.tmpl", data)
 }
 func Karteikasten(w http.ResponseWriter, r *http.Request) {
 	userName := ""

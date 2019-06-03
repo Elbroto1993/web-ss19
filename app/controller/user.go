@@ -3,9 +3,11 @@ package controller
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"net/http"
+	// "strconv"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -23,26 +25,25 @@ func init() {
 
 // AddUser controller
 func AddUser(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	email := r.FormValue("email")
 
 	user := model.User{}
-	user.Username = username
-	user.Password = password
-	user.Email = email
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		fmt.Println(err)
+	}
 	user.CreatedAt = time.Now()
 
-	err := user.Add()
+	err = user.Add()
 	if err != nil {
-		data := struct {
-			ErrorMsg string
-		}{
-			ErrorMsg: err.Error(),
-		}
-		tmpl.ExecuteTemplate(w, "register.tmpl", data)
+		json.NewEncoder(w).Encode(err.Error())
 	} else {
-		Index(w, r)
+		session, _ := store.Get(r, "session")
+
+		// Set user as authenticated
+		session.Values["authenticated"] = true
+		session.Values["username"] = user.Username
+		session.Save(r, w)
+
 	}
 }
 
@@ -66,13 +67,15 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	username := session.Values["username"].(string)
 	password := r.FormValue("password")
 	email := r.FormValue("email")
+	user, err := model.GetUserByUsername(username)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	user := model.User{}
-	user.Username = username
 	user.Password = password
 	user.Email = email
 
-	err := user.Update()
+	err = user.Update()
 	if err != nil {
 		data := struct {
 			ErrorMsg string

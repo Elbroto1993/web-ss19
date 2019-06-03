@@ -31,50 +31,83 @@
 //   xhr3.send(null);
 // }
 
-// // REGISTER
-// let registerButton = document.getElementById("registerButton");
-// registerButton.addEventListener("click", registerNewUser);
+// REGISTER
+let registerButton = document.getElementById("registerButton");
+registerButton.addEventListener("click", registerNewUser);
 
-// function registerNewUser(e) {
-//   e.preventDefault();
-//   // Get values from form
-//   let username = document.getElementById("registerUsername").value;
-//   let email = document.getElementById("registerEmail").value;
-//   let passwordOne = document.getElementById("registerPasswordOne").value;
-//   let passwordTwo = document.getElementById("registerPasswordTwo").value;
-//   // Check if both passwords are the same
-//   if (passwordOne !== passwordTwo) {
-//     let registerFailPassword = document.getElementById(
-//       "registerPasswoerterError"
-//     );
-//     registerFailPassword.innerHTML = "Die Passwörter stimmen nicht überein!";
-//     registerFailPassword.classList.add("registerAlert");
-//     // Check if checkbox is checked
-//   } else if (!document.getElementById("datenschutzCheckbox").checked) {
-//     let checkboxNotChecked = document.getElementById("registerCheckboxError");
-//     checkboxNotChecked.innerHTML = "Bitte setzen sie hier einen Haken!";
-//     checkboxNotChecked.classList.add("registerAlert");
-//   } else {
-//     // Prepare http request
-//     let xhr = new XMLHttpRequest();
-//     let url = "http://localhost:8080/add-user";
-//     xhr.open("POST", url, true);
-//     xhr.setRequestHeader("Content-Type", "application/json");
-//     // Callback function
-//     xhr.onreadystatechange = function() {
-//       if (xhr.readyState == 4 && xhr.status == 200) {
-//         console.log("hallo");
-//       }
-//     };
-//     // POST data
-//     let data = JSON.stringify({
-//       username: username,
-//       email: email,
-//       password: passwordOne
-//     });
-//     xhr.send(data);
-//   }
-// }
+function registerNewUser(e) {
+  e.preventDefault();
+  // Get values from form
+  let username = document.getElementById("registerUsername").value;
+  let email = document.getElementById("registerEmail").value;
+  let passwordOne = document.getElementById("registerPasswordOne").value;
+  let passwordTwo = document.getElementById("registerPasswordTwo").value;
+  // Clear values
+  document.getElementById("registerUsernameError").innerHTML = "";
+  document.getElementById("registerEmailError").innerHTML = "";
+  document.getElementById("registerCheckboxError").innerHTML = "";
+  document.getElementById("registerPasswoerterError").innerHTML = "";
+  document
+    .getElementById("registerUsernameError")
+    .classList.remove("registerAlert");
+  document
+    .getElementById("registerEmailError")
+    .classList.remove("registerAlert");
+  document
+    .getElementById("registerCheckboxError")
+    .classList.remove("registerAlert");
+  document
+    .getElementById("registerPasswoerterError")
+    .classList.remove("registerAlert");
+  // Check if both passwords are the same
+  if (passwordOne !== passwordTwo) {
+    let registerFailPassword = document.getElementById(
+      "registerPasswoerterError"
+    );
+    registerFailPassword.innerHTML = "Die Passwörter stimmen nicht überein!";
+    registerFailPassword.classList.add("registerAlert");
+    // Check if checkbox is checked
+  } else if (!document.getElementById("datenschutzCheckbox").checked) {
+    let checkboxNotChecked = document.getElementById("registerCheckboxError");
+    checkboxNotChecked.innerHTML = "Bitte setzen sie hier einen Haken!";
+    checkboxNotChecked.classList.add("registerAlert");
+  } else {
+    // Prepare http request
+    let xhr = new XMLHttpRequest();
+    let url = "http://localhost:8080/add-user";
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    // Callback function
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        let response = xhr.response.replace(/"/g, "");
+        response = response.trim();
+        if (response == "username exists already") {
+          document
+            .getElementById("registerUsernameError")
+            .classList.add("registerAlert");
+          document.getElementById("registerUsernameError").innerHTML =
+            "Nutzername ist bereits vorhanden";
+        } else if (response == "email exists already") {
+          document
+            .getElementById("registerEmailError")
+            .classList.add("registerAlert");
+          document.getElementById("registerEmailError").innerHTML =
+            "Email ist bereits vorhanden";
+        } else {
+          window.location.href = `http://localhost:8080/meinekarteien`;
+        }
+      }
+    };
+    // POST data
+    let data = JSON.stringify({
+      username: username,
+      email: email,
+      password: passwordOne
+    });
+    xhr.send(data);
+  }
+}
 
 // // LOGIN
 // document.getElementById("loginButton").addEventListener("click", login);

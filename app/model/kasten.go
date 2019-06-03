@@ -25,7 +25,7 @@ type Karteikasten struct {
 }
 
 // Add Kasten
-func (karteikasten Karteikasten) Add() (err error) {
+func (karteikasten Karteikasten) Add() (kastenid string, err error) {
 
 	karteikasten.Type = "Karteikasten"
 
@@ -38,13 +38,53 @@ func (karteikasten Karteikasten) Add() (err error) {
 
 	// Add karteikasten to DB
 
-	_, _, err = btDB.Save(k, nil)
+	kastenid, _, err = btDB.Save(k, nil)
 
 	if err != nil {
 		fmt.Printf("[Add] error: %s", err)
 	}
 
-	return err
+	return kastenid, err
+}
+
+// Update Kasten
+func (karteikasten Karteikasten) Update() (string, error) {
+
+	karteikasten.Type = "Karteikasten"
+
+	// Convert Karteikasten struct to map[string]interface as required by Save() method
+	k, err := karteikasten2Map(karteikasten)
+
+	// Add karteikasten to DB
+
+	err = btDB.Set(karteikasten.Id, k)
+
+	if err != nil {
+		fmt.Printf("[Add] error: %s", err)
+	}
+
+	return karteikasten.Id, err
+}
+
+func GetKastenById(kastenid string) (Karteikasten, error) {
+	query := `
+	{
+		"selector": {
+			 "type": "Karteikasten",
+			 "_id": "%s"
+		}
+	}`
+	k, err := btDB.QueryJSON(fmt.Sprintf(query, kastenid))
+	if err != nil || len(k) != 1 {
+		return Karteikasten{}, err
+	}
+
+	kasten, err := map2Karteikasten(k[0])
+	if err != nil {
+		return Karteikasten{}, err
+	}
+
+	return kasten, nil
 }
 
 // ---------------------------------------------------------------------------

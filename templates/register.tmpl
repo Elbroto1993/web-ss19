@@ -117,7 +117,7 @@
           </h3>
           <!-- Input zum registrieren -->
           <div class="registerInputWindow">
-            <form class="registerInputFields" action="/add-user" method="POST">
+            <form class="registerInputFields">
               <p>Nutzername</p>
               <input
                 type="text"
@@ -126,7 +126,7 @@
                 placeholder="maxmustermann"
                 id="registerUsername"
               />
-              <p id="registerUsernameError" class='{{if .ErrorMsg}}{{if eq "username exists already" .ErrorMsg}}registerAlert{{end}}{{end}}'>{{if .ErrorMsg}}{{if eq "username exists already" .ErrorMsg}}Nutzername ist bereits vorhanden{{end}}{{end}}</p>
+              <p id="registerUsernameError"></p>
               <p>E-Mail</p>
               <input
                 type="text"
@@ -135,7 +135,7 @@
                 placeholder="muster@example.com"
                 id="registerEmail"
               />
-              <p id="registerEmailError" class='{{if .ErrorMsg}}{{if eq "email exists already" .ErrorMsg}}registerAlert{{end}}{{end}}'>{{if .ErrorMsg}}{{if eq "email exists already" .ErrorMsg}}Email ist bereits vorhanden{{end}}{{end}}</p>
+              <p id="registerEmailError"></p>
               <p>Passwort</p>
               <input type="password" size="30" name="password" id="registerPasswordOne" />
               <p></p>
@@ -166,5 +166,6 @@
         </section>
       </div>
     </div>
+    <script src="static/js/register.js"></script>
   </body>
 </html>
