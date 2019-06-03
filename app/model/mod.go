@@ -400,11 +400,24 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 		}
 	}
 
+	// Check if kasten is being owned by current user for fortschritt
+	var fortschritt string
+	fortschritt = strconv.Itoa(0)
+	if username != "" {
+		currentUser, err := GetUserByUsername(username)
+		if err != nil {
+			return ViewData{}, err
+		}
+		if currentUser.Id == decodeKasten.UserID {
+			fortschritt = getFortschritt(returnKarten)
+		}
+	}
+
 	viewData := ViewData{
 		Kategorie:              decodeKasten.Kategorie,
 		Titel:                  decodeKasten.Titel,
 		Beschreibung:           decodeKasten.Beschreibung,
-		Fortschritt:            getFortschritt(returnKarten),
+		Fortschritt:            fortschritt,
 		Private:                decodeKasten.Private,
 		CreatedByUsername:      createdByUsername["username"].(string),
 		CreatedByUserID:        decodeKasten.CreatedByUserID,
