@@ -185,7 +185,7 @@
           <div class="viewGrid">
             <div class="viewPositionTitle">Titel</div>
             <div class="flexNoWrap viewPositionTitle">
-              <div><strong> Titel der Karte</strong></div>
+              <div><strong> {{.Karte.Titel}}</strong></div>
               <div>
                 <div class="flexNoWrap">
                   <div>
@@ -252,7 +252,7 @@
             <a href='lern2?_karteid={{.Karte.Id}}&_kastenid={{.Karte.KastenID}}'><button class="btnYellow aufdeckenButton">Aufdecken</button></a>
           </div>
           <div class="lernRightButton">
-            <button class="btnYellow">Überspringen</button>
+            <a href='lern?_karteid={{.Karte.Id}}&_kastenid={{.Karte.KastenID}}'><button class="btnYellow">Überspringen</button></a>
           </div>
         </div>
       </div>

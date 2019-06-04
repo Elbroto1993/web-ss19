@@ -9,3 +9,11 @@
 //   window.location.href = `http://localhost:8080/view?_id=${id}`;
 // }
 
+// MDE EDITOR
+let simplemde = new SimpleMDE({
+  element: document.getElementById("viewFrageTextarea")
+});
+
+let simplemde2 = new SimpleMDE({
+  element: document.getElementById("viewAntwortTextarea")
+});

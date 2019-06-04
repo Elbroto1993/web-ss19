@@ -1,7 +1,6 @@
 package model
 
 import (
-	// "fmt"
 	couchdb "github.com/leesper/couchdb-golang"
 	"github.com/mitchellh/mapstructure"
 	"math"
@@ -433,7 +432,7 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 }
 
 // GetLernData ...
-func GetLernData(_id string, username string) (LernData, error) {
+func GetLernData(_kastenid string, _karteid string, username string) (LernData, error) {
 	// Data for sidebar
 	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
@@ -447,7 +446,7 @@ func GetLernData(_id string, username string) (LernData, error) {
 		}
 	}
 
-	kasten, err := btDB.Get(_id, nil)
+	kasten, err := btDB.Get(_kastenid, nil)
 	if err != nil {
 		return LernData{}, err
 	}
@@ -470,7 +469,7 @@ func GetLernData(_id string, username string) (LernData, error) {
 	}
 	// Filter allKarten and only get the karten that belong to the kasten
 	for i := 0; i < len(decodeKarten); i++ {
-		if decodeKarten[i].KastenID == _id {
+		if decodeKarten[i].KastenID == _kastenid {
 			returnKarten = append(returnKarten, decodeKarten[i])
 			anzKarten++
 		}
@@ -497,12 +496,12 @@ func GetLernData(_id string, username string) (LernData, error) {
 	////////// CHECK IF KASTEN IS ALREADY BEING LEARNED, ELSE ADD KASTEN TO USER ////////////
 	user, _ := GetUserByUsername(username)
 	if user.Id != decodeKasten.UserID {
-		kasten, _ := GetKastenById(_id)
+		kasten, _ := GetKastenById(_kastenid)
 		kasten.Private = "true"
 		kasten.UserID = user.Id
 		newKastenId, _ := kasten.Add()
 		for i := 0; i < len(decodeKarten); i++ {
-			if decodeKarten[i].KastenID == _id {
+			if decodeKarten[i].KastenID == _kastenid {
 				decodeKarten[i].KastenID = newKastenId
 				decodeKarten[i].Add()
 			}
@@ -512,8 +511,19 @@ func GetLernData(_id string, username string) (LernData, error) {
 
 	// Calucalate value for random karte
 	var retKarte Karteikarte
-	if len(returnKarten) != 0 {
-		retKarte = returnKarten[rand.Intn(len(returnKarten))]
+	karteGefunden := false
+	if len(returnKarten)-2 > 0 {
+		for !karteGefunden {
+			zufallsFach := getZufallsFach()
+			for i := 0; i < len(returnKarten); i++ {
+				if returnKarten[i].Fach == strconv.Itoa(zufallsFach) && returnKarten[i].Id != _karteid {
+					retKarte = returnKarten[i]
+					karteGefunden = true
+				}
+			}
+		}
+	} else if len(returnKarten) > 0 {
+		retKarte = returnKarten[0]
 	}
 
 	lernData := LernData{
@@ -888,4 +898,39 @@ func GetAlleOeffentlichenKaesten() ([]Karteikasten, error) {
 	}
 
 	return retKaesten, nil
+}
+
+// Function to decide which fach will be shown to the user
+func getZufallsFach() int {
+	r := math.Floor((float64(rand.Intn(14-0) + 0)))
+	var f int
+
+	switch r {
+	case 0:
+		f = 4
+		break
+	case 1:
+	case 2:
+		f = 3
+		break
+	case 3:
+	case 4:
+	case 5:
+		f = 2
+		break
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		f = 1
+		break
+	case 10:
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+		f = 0
+		break
+	}
+	return f
 }

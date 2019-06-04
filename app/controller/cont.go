@@ -94,8 +94,9 @@ func Lern(w http.ResponseWriter, r *http.Request) {
 	}
 	userName := session.Values["username"].(string)
 
-	_id := r.FormValue("_kastenid")
-	data, err := model.GetLernData(_id, userName)
+	_kastenid := r.FormValue("_kastenid")
+	_karteid := r.FormValue("_karteid")
+	data, err := model.GetLernData(_kastenid, _karteid, userName)
 	if err != nil {
 		fmt.Println(err)
 	}
