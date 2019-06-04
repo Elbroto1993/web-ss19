@@ -17,7 +17,7 @@ func AddOrUpdateKarte(w http.ResponseWriter, r *http.Request) {
 	}
 	_karteid := karte.Id
 	_kastenid := karte.KastenID
-	// If no _karteid in url create new karte, else update karte
+	// If no _karteid in url/karte create new karte, else update karte
 	if _karteid == "" {
 
 		karte.Fach = strconv.Itoa(0)
@@ -62,4 +62,27 @@ func DeleteKarte(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	json.NewEncoder(w).Encode("Kasten geloescht")
+}
+
+// AddKarte controller
+func KarteRichtigOderFalsch(w http.ResponseWriter, r *http.Request) {
+	karte := model.Karteikarte{}
+	err := json.NewDecoder(r.Body).Decode(&karte)
+	if err != nil {
+		fmt.Println(err)
+	}
+	_karteid := karte.Id
+
+	tempkarte, err := model.GetKarteById(_karteid)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	tempkarte.Fach = karte.Fach
+
+	karteid, err := tempkarte.Update()
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.NewEncoder(w).Encode(karteid)
 }

@@ -31,6 +31,7 @@ func main() {
 	http.HandleFunc("/delete-kasten", controller.DeleteKasten)
 
 	http.HandleFunc("/add-or-update-karte", controller.AddOrUpdateKarte)
+	http.HandleFunc("/update-karte-lern", controller.KarteRichtigOderFalsch)
 	http.HandleFunc("/delete-karte", controller.DeleteKarte)
 
 	server.ListenAndServe()

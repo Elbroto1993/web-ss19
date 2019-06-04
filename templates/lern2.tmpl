@@ -185,7 +185,7 @@
           <div class="viewGrid">
             <div class="viewPositionTitle">Titel</div>
             <div class="flexNoWrap viewPositionTitle">
-              <div><strong> Titel der Karte</strong></div>
+              <div><strong> {{.Karte.Titel}}</strong></div>
               <div>
                 <div class="flexNoWrap">
                   <div>
@@ -250,17 +250,17 @@
               {{.Karte.Antwort}}
             </div>
           </div>
-          <div class="lernCenterButton">
-            <button class="btnGreen">
+          <div class="lernCenterButton" id="{{.Karte.Fach}}">
+            <button class="btnGreen" id="richtigButton">
               Richtig
             </button>
-            <button class="btnRed">
+            <button class="btnRed" id="falschButton">
               Falsch
             </button>
           </div>
         </div>
       </div>
     </div>
-    <!-- <script src="static/js/lern2.js"></script> -->
+    <script src="static/js/lern2.js"></script>
   </body>
 </html>
