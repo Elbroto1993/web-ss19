@@ -101,6 +101,12 @@ func DeleteUser(username string) (err error) {
 // Update User
 func (user User) Update() (err error) {
 
+	// Check wether email already exists
+	userInDB, err := GetUserByEmail(user.Email)
+	if err == nil && userInDB.Email == user.Email {
+		return errors.New("email exists already")
+	}
+
 	// Hash password
 	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 	b64HashedPwd := base64.StdEncoding.EncodeToString(hashedPwd)

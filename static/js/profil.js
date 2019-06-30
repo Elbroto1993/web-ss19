@@ -202,13 +202,14 @@ function deleteProfile() {
 }
 
 // IMAGE UPLOAD
-// let imageInput = document.getElementById("imageUploadInput");
+let imageInput = document.getElementById("imageUploadInput");
+imageInput.onchange = function() {
+  document.getElementById("uploadForm").submit();
+};
 // let imageButton = document.getElementById("imageUploadButton");
 // imageButton.addEventListener("click", chooseImage);
-// imageInput.addEventListener("change", uploadImage);
 
 // function chooseImage(e) {
-//   e.preventDefault();
 //   imageInput.click();
 // }
 // function uploadImage(e) {

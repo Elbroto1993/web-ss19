@@ -158,13 +158,14 @@
               />
               {{end}}
             </div>
-            <form enctype="multipart/form-data" action="/update-image" method="POST">
+            <form enctype="multipart/form-data" action="/update-image" method="POST" id="uploadForm">
+            <label for="imageUploadInput" class="btnYellow">Edit</label>
               <input
                 type="file"
                 name="myFile"
                 id="imageUploadInput"
-                              />
-              <button class="btnYellow" id="imageUploadButton" type="submit">Edit</button>
+                style="display:none"
+                />
             </form>
             <h3 id="profilUsernameOutput">{{.UserName}}</h3>
             <p id="profilEmailOutput">{{.Email}}</p>
@@ -192,7 +193,7 @@
               <p id="neueEmail"></p>
               <!-- Input altes passwort -->
               <p>Altes Passwort</p>
-              <input type="password" size="35" id="updateProfilAltesPasswort" />
+              <input type="password" size="35" id="updateProfilAltesPasswort"/>
               <p></p>
               <!-- Input neues passwort -->
               <p>Neues Passwort</p>

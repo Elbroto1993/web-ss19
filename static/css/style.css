@@ -772,6 +772,13 @@ strong {
   }
 }
 
-/* .CodeMirror {
-  max-width: ;
-} */
+.btnYellowTest {
+  background-color: #fed330;
+  border: none;
+  border-bottom: 3px solid #f7b731;
+  cursor: pointer;
+  color: white;
+  padding: 0;
+  text-align: center;
+  width: 100pc;
+}

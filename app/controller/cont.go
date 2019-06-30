@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"html/template"
@@ -68,8 +67,7 @@ func Edit2(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "edit2.tmpl", data)
 }
 func Karteikasten(w http.ResponseWriter, r *http.Request) {
-	var kategorie string
-	err := json.NewDecoder(r.Body).Decode(&kategorie)
+	kategorie := r.FormValue("_kategorie")
 
 	userName := ""
 	var loggedIn string

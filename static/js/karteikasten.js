@@ -6,18 +6,18 @@ document
 
 function selectListener() {
   let kategorie = this.value;
-  let xhr = new XMLHttpRequest();
-  let url = `http://localhost:8080/karteikasten`;
-  xhr.open("POST", url, true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      console.log(xhr.response);
-    }
-  };
-  let data = JSON.stringify({
-    kategorie: kategorie
-  });
-  xhr.send(data);
+  window.location.href = `http://localhost:8080/karteikasten?_kategorie=${kategorie}`;
+  // let xhr = new XMLHttpRequest();
+  // let url = `http://localhost:8080/karteikasten`;
+  // xhr.open("POST", url, true);
+  // xhr.onreadystatechange = function() {
+  //   if (xhr.readyState == 4 && xhr.status == 200) {
+  //   }
+  // };
+  // let data = JSON.stringify({
+  //   kategorie: kategorie
+  // });
+  // xhr.send(data);
   //   let ueberkategorie = this.options[this.selectedIndex].parentNode.getAttribute(
   //     "label"
   //   );
