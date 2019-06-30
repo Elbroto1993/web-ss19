@@ -202,16 +202,29 @@ function deleteProfile() {
 }
 
 // IMAGE UPLOAD
-let imageInput = document.getElementById("imageUploadInput");
-let imageButton = document.getElementById("imageUploadButton");
-imageButton.addEventListener("click", chooseImage);
-imageInput.addEventListener("change", uploadImage);
+// let imageInput = document.getElementById("imageUploadInput");
+// let imageButton = document.getElementById("imageUploadButton");
+// imageButton.addEventListener("click", chooseImage);
+// imageInput.addEventListener("change", uploadImage);
 
-function chooseImage(e) {
-  e.preventDefault();
-  imageInput.click();
-}
-function uploadImage(e) {
-  let a = e.target.files[0];
-  console.log(a);
-}
+// function chooseImage(e) {
+//   e.preventDefault();
+//   imageInput.click();
+// }
+// function uploadImage(e) {
+//   let a = e.target.files[0];
+//   // Prepare http post request
+//   let xhr = new XMLHttpRequest();
+//   let url = `http://localhost:8080/update-image`;
+//   xhr.open("POST", url, true);
+//   xhr.setRequestHeader("Content-Type", "multipart/form-data");
+//   xhr.onreadystatechange = function() {
+//     if (xhr.readyState == 4 && xhr.status == 200) {
+//       window.location.href = `http://localhost:8080/profil`;
+//     }
+//   };
+//   let data = JSON.stringify({
+//     bild: a
+//   });
+//   xhr.send(data);
+// }

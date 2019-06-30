@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"html/template"
@@ -35,13 +36,13 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "index.tmpl", data)
 }
 func Edit(w http.ResponseWriter, r *http.Request) {
-	data, err := model.GetEditData()
+	// Add username from session to struct
+	session, err := store.Get(r, "session")
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	// Add username from session to struct
-	session, err := store.Get(r, "session")
+	username := session.Values["username"].(string)
+	data, err := model.GetEditData(username)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -67,6 +68,9 @@ func Edit2(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "edit2.tmpl", data)
 }
 func Karteikasten(w http.ResponseWriter, r *http.Request) {
+	var kategorie string
+	err := json.NewDecoder(r.Body).Decode(&kategorie)
+
 	userName := ""
 	var loggedIn string
 	// If user is logged in add loggedin and username to struct
@@ -76,7 +80,7 @@ func Karteikasten(w http.ResponseWriter, r *http.Request) {
 		userName = session.Values["username"].(string)
 	}
 
-	kaesten, err := model.GetKarteikastenData(userName)
+	kaesten, err := model.GetKarteikastenData(userName, kategorie)
 	if err != nil {
 		fmt.Println(err)
 	}

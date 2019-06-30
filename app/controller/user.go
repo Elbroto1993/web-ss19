@@ -8,6 +8,7 @@ import (
 	"github.com/Elbroto1993/web-ss19-w-template/app/model"
 	"net/http"
 	// "strconv"
+	"io/ioutil"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -77,15 +78,9 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	err = user.Update()
 	if err != nil {
-		data := struct {
-			ErrorMsg string
-		}{
-			ErrorMsg: err.Error(),
-		}
-		tmpl.ExecuteTemplate(w, "profil.tmpl", data)
-	} else {
-		tmpl.ExecuteTemplate(w, "profil.tmpl", nil)
+		fmt.Println(err)
 	}
+	Profil(w, r)
 }
 
 // Login controller
@@ -151,4 +146,31 @@ func Auth(h http.HandlerFunc) http.HandlerFunc {
 			h(w, r)
 		}
 	}
+}
+
+// UpdateImage Controller
+func UpdateImage(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+	username := session.Values["username"].(string)
+
+	user, _ := model.GetUserByUsername(username)
+
+	r.ParseMultipartForm(10 << 20)
+
+	file, _, err := r.FormFile("myFile")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	filebyte, _ := ioutil.ReadAll(file)
+
+	encodedString := base64.StdEncoding.EncodeToString(filebyte)
+
+	user.Image = encodedString
+
+	user.UpdateImage()
+
+	Profil(w, r)
 }

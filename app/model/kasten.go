@@ -98,6 +98,61 @@ func DeleteKasten(_id string) (err error) {
 	return err
 }
 
+// Delete Kasten by Id
+func DeleteKastenWithProfile(username string) (err error) {
+
+	user, err := GetUserByUsername(username)
+	if err != nil {
+		return err
+	}
+	createdByUserId := user.Id
+
+	allKasten, err := GetAllKasten()
+	if err != nil {
+		return err
+	}
+
+	var decodeKasten []Karteikasten
+	mapstructure.Decode(allKasten, &decodeKasten)
+	// Add _id to decodeKasten, because mapstructure.Decode doesn't do it
+	index := 0
+	for _, v := range allKasten {
+		decodeKasten[index].Id = v["_id"].(string)
+		index++
+	}
+
+	for j := 0; j < len(decodeKasten); j++ {
+		if createdByUserId == decodeKasten[j].CreatedByUserID {
+			allKarten, err := GetAllKarten()
+			if err != nil {
+				return err
+			}
+			var decodeKarten []Karteikarte
+			mapstructure.Decode(allKarten, &decodeKarten)
+			// Add _id to decodeKarten, because mapstructure.Decode doesn't do it
+			index = 0
+			for _, v := range allKarten {
+				decodeKarten[index].Id = v["_id"].(string)
+				index++
+			}
+			// Delete all karten from kasten
+			for i := 0; i < len(decodeKarten); i++ {
+				if decodeKarten[i].KastenID == decodeKasten[j].Id {
+					btDB.Delete(decodeKarten[i].Id)
+				}
+			}
+
+			// Delete kasten from DB
+			err = btDB.Delete(decodeKasten[j].Id)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	}
+
+	return err
+}
+
 // GetKastenById ...
 func GetKastenById(kastenid string) (Karteikasten, error) {
 	query := `

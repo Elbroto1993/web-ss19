@@ -59,12 +59,21 @@
            <small>Logout</small>
           </button>
         </div>
+          {{if .Image}}
+          <img
+            src="data:image/png;base64,{{.Image}}"
+            alt="gray default male profile picture"
+            height="30"
+            width="30"
+          />
+          {{else}}
           <img
           src="static/images/defaultUser.png"
           alt="gray default male profile picture"
           height="30"
           width="30"
           />
+          {{end}}
         </div>
       </div>
     </header>
@@ -133,21 +142,29 @@
           <!-- Name und Bild des Profils -->
           <div class="gridProfilItem1 card">
             <div>
+              {{if .Image}}
               <img
+                src="data:image/png;base64,{{.Image}}"
+                alt="gray default male profile picture"
+                height="80"
+                width="80"
+              />
+              {{else}}
+                <img
                 src="static/images/defaultUser.png"
                 alt="gray default male profile picture"
                 height="80"
                 width="80"
               />
+              {{end}}
             </div>
-            <form>
+            <form enctype="multipart/form-data" action="/update-image" method="POST">
               <input
                 type="file"
-                name=""
+                name="myFile"
                 id="imageUploadInput"
-                hidden="hidden"
-              />
-              <button class="btnYellow" id="imageUploadButton">Edit</button>
+                              />
+              <button class="btnYellow" id="imageUploadButton" type="submit">Edit</button>
             </form>
             <h3 id="profilUsernameOutput">{{.UserName}}</h3>
             <p id="profilEmailOutput">{{.Email}}</p>

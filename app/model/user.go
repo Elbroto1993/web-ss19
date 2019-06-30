@@ -19,6 +19,7 @@ type User struct {
 	Username  string    `json:"username"`
 	Password  string    `json:"password"`
 	Email     string    `json:"email"`
+	Image     string    `json:"Image"`
 	CreatedAt time.Time `json:"createdat"`
 	couchdb.Document
 }
@@ -77,13 +78,15 @@ func DeleteUser(username string) (err error) {
 	}
 
 	// Delete all kaesten from user
-	kaesten, err := getEigeneKaesten(username)
-	if err != nil {
-		return err
-	}
-	for i := 0; i < len(kaesten); i++ {
-		btDB.Delete(kaesten[i].Id)
-	}
+	// kaesten, err := getEigeneKaesten(username)
+	// if err != nil {
+	// 	return err
+	// }
+	// for i := 0; i < len(kaesten); i++ {
+	// 	btDB.Delete(kaesten[i].Id)
+	// }
+
+	DeleteKastenWithProfile(username)
 
 	// Delete user from DB
 	err = btDB.Delete(user.Id)
@@ -97,6 +100,13 @@ func DeleteUser(username string) (err error) {
 
 // Update User
 func (user User) Update() (err error) {
+
+	// Hash password
+	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	b64HashedPwd := base64.StdEncoding.EncodeToString(hashedPwd)
+
+	user.Password = b64HashedPwd
+	user.Type = "User"
 
 	// Convert Todo struct to map[string]interface as required by Save() method
 	u, err := user2Map(user)
@@ -161,6 +171,16 @@ func GetUserByEmail(email string) (user User, err error) {
 	}
 
 	return user, nil
+}
+
+// UpdateImage ...
+func (user User) UpdateImage() (err error) {
+
+	u, err := user2Map(user)
+
+	err = btDB.Set(user.Id, u)
+
+	return err
 }
 
 // ---------------------------------------------------------------------------

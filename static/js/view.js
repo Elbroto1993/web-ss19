@@ -10,10 +10,11 @@
 // }
 
 // MDE EDITOR
-let simplemde = new SimpleMDE({
-  element: document.getElementById("viewFrageTextarea")
-});
+// let simplemde = new SimpleMDE({
+//   element: document.getElementById("viewFrageTextarea")
+// });
 
-let simplemde2 = new SimpleMDE({
-  element: document.getElementById("viewAntwortTextarea")
-});
+// let simplemde2 = new SimpleMDE({
+//   element: document.getElementById("viewAntwortTextarea")
+// });
+

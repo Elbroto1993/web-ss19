@@ -19,6 +19,7 @@ type IndexData struct {
 	AnzEigeneKaesten       string `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
 	ErrorMsg               string `json:"errormsg"`
+	Image                  string `json:"image"`
 }
 
 // KarteikastenData Struct
@@ -29,6 +30,7 @@ type KarteikastenData struct {
 	AnzEigeneKaesten       string         `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string         `json:"anzoeffentlichekaesten"`
 	Kaesten                []Karteikasten `json:"kaesten"`
+	Image                  string         `json:"image"`
 }
 
 // MeineKarteienData Struct
@@ -40,6 +42,7 @@ type MeineKarteienData struct {
 	Fortschritt            string         `json:"fortschritt"`
 	MeineKaesten           []Karteikasten `json:"meinekaesten"`
 	AndereKaesten          []Karteikasten `json:"anderekaesten"`
+	Image                  string         `json:"image"`
 }
 
 // ViewData Struct
@@ -60,6 +63,7 @@ type ViewData struct {
 	AnzOeffentlicheKaesten string        `json:"anzoeffentlichekaesten"`
 	SelectedKarte          Karteikarte   `json:"selectedkarte"`
 	Karten                 []Karteikarte `json:"karten"`
+	Image                  string        `json:"image"`
 }
 
 // LernData Struct
@@ -82,6 +86,8 @@ type LernData struct {
 	AnzEigeneKaesten       string      `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string      `json:"anzoeffentlichekaesten"`
 	Karte                  Karteikarte `json:"karte"`
+	NewKastenID            string      `json:"kastenid"`
+	Image                  string      `json:"image"`
 }
 
 // EditData Struct
@@ -89,6 +95,7 @@ type EditData struct {
 	UserName               string `json:"username"`
 	AnzEigeneKaesten       string `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
+	Image                  string `json:"image"`
 }
 
 // Edit2Data Struct
@@ -106,6 +113,7 @@ type Edit2Data struct {
 	AnzOeffentlicheKaesten string        `json:"anzoeffentlichekaesten"`
 	SelectedKarte          Karteikarte   `json:"selectedkarte"`
 	Karten                 []Karteikarte `json:"karten"`
+	Image                  string        `json:"image"`
 }
 
 // ProfilData Struct
@@ -116,6 +124,7 @@ type ProfilData struct {
 	AnzOeffentlicheKaesten string    `json:"anzoeffentlichekaesten"`
 	AnzEigeneKarten        string    `json:"anzeigenekarten"`
 	CreatedAt              time.Time `json:"createdat"`
+	Image                  string    `json:"image"`
 }
 
 // RegisterData struct
@@ -211,12 +220,20 @@ func GetIndexData(username string) (IndexData, error) {
 			return IndexData{}, err
 		}
 	}
+	var user User
+	if username != "" {
+		user, err = GetUserByUsername(username)
+		if err != nil {
+			return IndexData{}, err
+		}
+	}
 	index := IndexData{
 		AnzUser:                strconv.Itoa(len(allUser)),
 		AnzKasten:              strconv.Itoa(len(allKasten)),
 		AnzKarten:              strconv.Itoa(len(allKarten)),
 		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
 		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
+		Image:                  user.Image,
 	}
 	return index, nil
 }
@@ -237,44 +254,101 @@ func GetRegisterData() (RegisterData, error) {
 }
 
 // GetKarteikastenData ...
-func GetKarteikastenData(username string) (KarteikastenData, error) {
+func GetKarteikastenData(username string, kategorie string) (KarteikastenData, error) {
 	// Get all oeffentliche Kaesten and decode them
 	alleOeffentlichenKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
 		return KarteikastenData{}, err
 	}
 
-	// Get all eigene kaesten if logged in
-	var eigeneKaesten []Karteikasten
-	if username != "" {
-		eigeneKaesten, err = getEigeneKaesten(username)
+	var filterKaesten []Karteikasten
+	if kategorie != "" {
+		for i := 0; i < len(alleOeffentlichenKaesten); i++ {
+			if alleOeffentlichenKaesten[i].Kategorie == kategorie {
+				filterKaesten = append(filterKaesten, alleOeffentlichenKaesten[i])
+			}
+		}
+		// Get all eigene kaesten if logged in
+		var eigeneKaesten []Karteikasten
+		if username != "" {
+			eigeneKaesten, err = getEigeneKaesten(username)
+			if err != nil {
+				return KarteikastenData{}, err
+			}
+		}
+
+		// Get all Karten and decode them
+		allKarten, err := GetAllKarten()
 		if err != nil {
 			return KarteikastenData{}, err
 		}
-	}
-
-	// Get all Karten and decode them
-	allKarten, err := GetAllKarten()
-	if err != nil {
-		return KarteikastenData{}, err
-	}
-	var decodedKarten []Karteikarte
-	mapstructure.Decode(allKarten, &decodedKarten)
-	// Fill AnzKarten from Karteikasten with values
-	for i := 0; i < len(alleOeffentlichenKaesten); i++ {
-		countKarten := 0
-		for j := 0; j < len(decodedKarten); j++ {
-			if string(alleOeffentlichenKaesten[i].Id) == decodedKarten[j].KastenID {
-				countKarten++
+		var decodedKarten []Karteikarte
+		mapstructure.Decode(allKarten, &decodedKarten)
+		// Fill AnzKarten from Karteikasten with values
+		for i := 0; i < len(filterKaesten); i++ {
+			countKarten := 0
+			for j := 0; j < len(decodedKarten); j++ {
+				if string(filterKaesten[i].Id) == decodedKarten[j].KastenID {
+					countKarten++
+				}
+			}
+			filterKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		}
+		var user User
+		if username != "" {
+			user, err = GetUserByUsername(username)
+			if err != nil {
+				return KarteikastenData{}, err
 			}
 		}
-		alleOeffentlichenKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		var retValue KarteikastenData
+		retValue.Kaesten = filterKaesten
+		retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
+		retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
+		retValue.Image = user.Image
+		return retValue, nil
+	} else {
+
+		// Get all eigene kaesten if logged in
+		var eigeneKaesten []Karteikasten
+		if username != "" {
+			eigeneKaesten, err = getEigeneKaesten(username)
+			if err != nil {
+				return KarteikastenData{}, err
+			}
+		}
+
+		// Get all Karten and decode them
+		allKarten, err := GetAllKarten()
+		if err != nil {
+			return KarteikastenData{}, err
+		}
+		var decodedKarten []Karteikarte
+		mapstructure.Decode(allKarten, &decodedKarten)
+		// Fill AnzKarten from Karteikasten with values
+		for i := 0; i < len(alleOeffentlichenKaesten); i++ {
+			countKarten := 0
+			for j := 0; j < len(decodedKarten); j++ {
+				if string(alleOeffentlichenKaesten[i].Id) == decodedKarten[j].KastenID {
+					countKarten++
+				}
+			}
+			alleOeffentlichenKaesten[i].AnzKarten = strconv.Itoa(countKarten)
+		}
+		var user User
+		if username != "" {
+			user, err = GetUserByUsername(username)
+			if err != nil {
+				return KarteikastenData{}, err
+			}
+		}
+		var retValue KarteikastenData
+		retValue.Kaesten = alleOeffentlichenKaesten
+		retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
+		retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
+		retValue.Image = user.Image
+		return retValue, nil
 	}
-	var retValue KarteikastenData
-	retValue.Kaesten = alleOeffentlichenKaesten
-	retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
-	retValue.AnzEigeneKaesten = strconv.Itoa(len(eigeneKaesten))
-	return retValue, nil
 }
 
 // GetMeineKarteienData ...
@@ -326,12 +400,12 @@ func GetMeineKarteienData(username string) (MeineKarteienData, error) {
 			andereKaesten = append(andereKaesten, allKaestenFromUser[i])
 		}
 	}
-
 	var retValue MeineKarteienData
 	retValue.MeineKaesten = meineKaesten
 	retValue.AndereKaesten = andereKaesten
 	retValue.AnzOeffentlicheKaesten = strconv.Itoa(len(alleOeffentlichenKaesten))
 	retValue.AnzEigeneKaesten = strconv.Itoa(len(allKaestenFromUser))
+	retValue.Image = user.Image
 	return retValue, nil
 }
 
@@ -411,7 +485,13 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 			fortschritt = getFortschritt(returnKarten)
 		}
 	}
-
+	var user User
+	if username != "" {
+		user, err = GetUserByUsername(username)
+		if err != nil {
+			return ViewData{}, err
+		}
+	}
 	viewData := ViewData{
 		Kategorie:              decodeKasten.Kategorie,
 		Titel:                  decodeKasten.Titel,
@@ -427,12 +507,15 @@ func GetViewData(kastenid string, karteid string, username string) (ViewData, er
 		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
 		SelectedKarte:          decodeKarte,
 		Karten:                 returnKarten,
+		Image:                  user.Image,
 	}
 	return viewData, nil
 }
 
 // GetLernData ...
 func GetLernData(_kastenid string, _karteid string, username string) (LernData, error) {
+	var fach0, fach1, fach2, fach3, fach4 int
+	var retKarte Karteikarte
 	// Data for sidebar
 	anzOeffentlicheKaesten, err := GetAlleOeffentlichenKaesten()
 	if err != nil {
@@ -453,6 +536,7 @@ func GetLernData(_kastenid string, _karteid string, username string) (LernData, 
 	var decodeKasten Karteikasten
 	mapstructure.Decode(kasten, &decodeKasten)
 	decodeKasten.Id = kasten["_id"].(string)
+
 	allKarten, err := GetAllKarten()
 	if err != nil {
 		return LernData{}, err
@@ -467,65 +551,103 @@ func GetLernData(_kastenid string, _karteid string, username string) (LernData, 
 		decodeKarten[index].Id = v["_id"].(string)
 		index++
 	}
-	// Filter allKarten and only get the karten that belong to the kasten
-	for i := 0; i < len(decodeKarten); i++ {
-		if decodeKarten[i].KastenID == _kastenid {
-			returnKarten = append(returnKarten, decodeKarten[i])
-			anzKarten++
-		}
-	}
-	// Calculate count for each fach
-	var fach0, fach1, fach2, fach3, fach4 int
-	fach1 = 0
-	for i := 0; i < len(returnKarten); i++ {
-		switch returnKarten[i].Fach {
-		case "0":
-			fach0++
-		case "1":
-			fach1++
-		case "2":
-			fach2++
-		case "3":
-			fach3++
-		case "4":
-			fach4++
 
-		}
-	}
-
+	var newKastenId string
+	newKastenId = ""
 	////////// CHECK IF KASTEN IS ALREADY BEING LEARNED, ELSE ADD KASTEN TO USER ////////////
 	user, _ := GetUserByUsername(username)
 	if user.Id != decodeKasten.UserID {
 		kasten, _ := GetKastenById(_kastenid)
 		kasten.Private = "true"
 		kasten.UserID = user.Id
-		newKastenId, _ := kasten.Add()
+		newKastenId, _ = kasten.Add()
 		for i := 0; i < len(decodeKarten); i++ {
 			if decodeKarten[i].KastenID == _kastenid {
 				decodeKarten[i].KastenID = newKastenId
 				decodeKarten[i].Add()
 			}
 		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////
-
-	// Calucalate value for random karte
-	var retKarte Karteikarte
-	karteGefunden := false
-	if len(returnKarten)-2 > 0 {
-		for !karteGefunden {
-			zufallsFach := getZufallsFach()
-			for i := 0; i < len(returnKarten); i++ {
-				if returnKarten[i].Fach == strconv.Itoa(zufallsFach) && returnKarten[i].Id != _karteid {
-					retKarte = returnKarten[i]
-					karteGefunden = true
-				}
+		// Filter allKarten and only get the karten that belong to the kasten
+		for i := 0; i < len(decodeKarten); i++ {
+			if decodeKarten[i].KastenID == newKastenId {
+				returnKarten = append(returnKarten, decodeKarten[i])
+				anzKarten++
 			}
 		}
-	} else if len(returnKarten) > 0 {
-		retKarte = returnKarten[0]
-	}
+		// Calculate count for each fach
+		fach1 = 0
+		for i := 0; i < len(returnKarten); i++ {
+			switch returnKarten[i].Fach {
+			case "0":
+				fach0++
+			case "1":
+				fach1++
+			case "2":
+				fach2++
+			case "3":
+				fach3++
+			case "4":
+				fach4++
 
+			}
+		}
+		// Calucalate value for random karte
+		karteGefunden := false
+		if len(returnKarten)-2 > 0 {
+			for !karteGefunden {
+				zufallsFach := getZufallsFach()
+				for i := 0; i < len(returnKarten); i++ {
+					if returnKarten[i].Fach == strconv.Itoa(zufallsFach) && returnKarten[i].Id != _karteid {
+						retKarte = returnKarten[i]
+						karteGefunden = true
+					}
+				}
+			}
+		} else if len(returnKarten) > 0 {
+			retKarte = returnKarten[0]
+		}
+	} else {
+		// Filter allKarten and only get the karten that belong to the kasten
+		for i := 0; i < len(decodeKarten); i++ {
+			if decodeKarten[i].KastenID == _kastenid {
+				returnKarten = append(returnKarten, decodeKarten[i])
+				anzKarten++
+			}
+		}
+		// Calculate count for each fach
+		fach1 = 0
+		for i := 0; i < len(returnKarten); i++ {
+			switch returnKarten[i].Fach {
+			case "0":
+				fach0++
+			case "1":
+				fach1++
+			case "2":
+				fach2++
+			case "3":
+				fach3++
+			case "4":
+				fach4++
+
+			}
+		}
+		// Calucalate value for random karte
+		karteGefunden := false
+		if len(returnKarten)-2 > 0 {
+			for !karteGefunden {
+				zufallsFach := getZufallsFach()
+				for i := 0; i < len(returnKarten); i++ {
+					if returnKarten[i].Fach == strconv.Itoa(zufallsFach) && returnKarten[i].Id != _karteid {
+						retKarte = returnKarten[i]
+						karteGefunden = true
+					}
+				}
+			}
+		} else if len(returnKarten) > 0 {
+			retKarte = returnKarten[0]
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////////////////
 	lernData := LernData{
 		Kategorie:              decodeKasten.Kategorie,
 		Titel:                  decodeKasten.Titel,
@@ -544,6 +666,8 @@ func GetLernData(_kastenid string, _karteid string, username string) (LernData, 
 		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
 		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
 		Karte:                  retKarte,
+		NewKastenID:            newKastenId,
+		Image:                  user.Image,
 	}
 	return lernData, nil
 }
@@ -596,8 +720,8 @@ func GetLern2Data(kastenid string, karteid string, username string) (LernData, e
 	// Calculate count for each fach
 	var fach0, fach1, fach2, fach3, fach4 int
 	fach1 = 0
-	for i := 0; i < len(decodeKarten); i++ {
-		switch decodeKarten[i].Fach {
+	for i := 0; i < len(tempKarten); i++ {
+		switch tempKarten[i].Fach {
 		case "0":
 			fach0++
 		case "1":
@@ -610,7 +734,10 @@ func GetLern2Data(kastenid string, karteid string, username string) (LernData, e
 			fach4++
 		}
 	}
-
+	var user User
+	if username != "" {
+		user, _ = GetUserByUsername(username)
+	}
 	lernData := LernData{
 		Kategorie:              decodeKasten.Kategorie,
 		Titel:                  decodeKasten.Titel,
@@ -629,13 +756,20 @@ func GetLern2Data(kastenid string, karteid string, username string) (LernData, e
 		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
 		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
 		Karte:                  decodeKarte,
+		NewKastenID:            decodeKarte.KastenID,
+		Image:                  user.Image,
 	}
 	return lernData, nil
 }
 
 // GetEditData ...
-func GetEditData() (EditData, error) {
+func GetEditData(username string) (EditData, error) {
 	editData := EditData{}
+	user, err := GetUserByUsername(username)
+	if err != nil {
+		return EditData{}, err
+	}
+	editData.Image = user.Image
 	return editData, nil
 }
 
@@ -697,7 +831,10 @@ func GetEdit2Data(kastenid string, karteid string, username string) (Edit2Data, 
 			anzKarten++
 		}
 	}
-
+	var user User
+	if username != "" {
+		user, _ = GetUserByUsername(username)
+	}
 	edit2Data := Edit2Data{
 		Id:                     decodeKasten.Id,
 		UserName:               username,
@@ -712,6 +849,7 @@ func GetEdit2Data(kastenid string, karteid string, username string) (Edit2Data, 
 		AnzEigeneKaesten:       strconv.Itoa(len(eigeneKaesten)),
 		SelectedKarte:          decodeKarte,
 		Karten:                 returnKarten,
+		Image:                  user.Image,
 	}
 	return edit2Data, nil
 }
@@ -744,6 +882,7 @@ func GetProfilData(username string) (ProfilData, error) {
 		AnzEigeneKarten:        strconv.Itoa(len(eigeneKarten)),
 		AnzOeffentlicheKaesten: strconv.Itoa(len(anzOeffentlicheKaesten)),
 		CreatedAt:              user.CreatedAt,
+		Image:                  user.Image,
 	}
 
 	return profilData, nil

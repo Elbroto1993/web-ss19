@@ -56,12 +56,21 @@
            <small>Logout</small>
           </button>
         </div>
+                    {{if .Image}}
+          <img
+            src="data:image/png;base64,{{.Image}}"
+            alt="gray default male profile picture"
+            height="30"
+            width="30"
+          />
+          {{else}}
           <img
           src="static/images/defaultUser.png"
           alt="gray default male profile picture"
           height="30"
           width="30"
           />
+          {{end}}
         </div>
       </div>
     </header>
