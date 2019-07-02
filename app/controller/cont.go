@@ -35,13 +35,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "index.tmpl", data)
 }
 func Edit(w http.ResponseWriter, r *http.Request) {
+	kastenid := r.FormValue("_kastenid")
+
 	// Add username from session to struct
 	session, err := store.Get(r, "session")
 	if err != nil {
 		fmt.Println(err)
 	}
 	username := session.Values["username"].(string)
-	data, err := model.GetEditData(username)
+	data, err := model.GetEditData(username, kastenid)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -128,6 +130,8 @@ func Lern2(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "lern2.tmpl", data)
 }
 func Meinekarteien(w http.ResponseWriter, r *http.Request) {
+	kategorie := r.FormValue("_kategorie")
+
 	// Add username from session to struct
 	session, err := store.Get(r, "session")
 	if err != nil {
@@ -135,7 +139,7 @@ func Meinekarteien(w http.ResponseWriter, r *http.Request) {
 	}
 	userName := session.Values["username"].(string)
 
-	kaesten, err := model.GetMeineKarteienData(userName)
+	kaesten, err := model.GetMeineKarteienData(userName, kategorie)
 	if err != nil {
 		fmt.Println(err)
 	}

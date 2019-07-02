@@ -96,6 +96,9 @@ type EditData struct {
 	AnzEigeneKaesten       string `json:"anzeigenekasten"`
 	AnzOeffentlicheKaesten string `json:"anzoeffentlichekaesten"`
 	Image                  string `json:"image"`
+	Titel                  string `json:"titel"`
+	Beschreibung           string `json:"beschreibung"`
+	Kategorie              string `json:"kategorie"`
 }
 
 // Edit2Data Struct
@@ -352,7 +355,7 @@ func GetKarteikastenData(username string, kategorie string) (KarteikastenData, e
 }
 
 // GetMeineKarteienData ...
-func GetMeineKarteienData(username string) (MeineKarteienData, error) {
+func GetMeineKarteienData(username string, kategorie string) (MeineKarteienData, error) {
 	user, err := GetUserByUsername(username)
 	if err != nil {
 		return MeineKarteienData{}, err
@@ -389,17 +392,30 @@ func GetMeineKarteienData(username string) (MeineKarteienData, error) {
 		allKaestenFromUser[i].Fortschritt = getFortschritt(tempKarten)
 		allKaestenFromUser[i].AnzKarten = strconv.Itoa(countKarten)
 	}
-
 	var meineKaesten []Karteikasten
 	var andereKaesten []Karteikasten
-	// Split allKaestenFromUser in eigenen und andere kaesten
-	for i := 0; i < len(allKaestenFromUser); i++ {
-		if allKaestenFromUser[i].CreatedByUserID == user.Id {
-			meineKaesten = append(meineKaesten, allKaestenFromUser[i])
-		} else {
-			andereKaesten = append(andereKaesten, allKaestenFromUser[i])
+	if kategorie == "" {
+		// Split allKaestenFromUser in eigenen und andere kaesten
+		for i := 0; i < len(allKaestenFromUser); i++ {
+			if allKaestenFromUser[i].CreatedByUserID == user.Id {
+				meineKaesten = append(meineKaesten, allKaestenFromUser[i])
+			} else {
+				andereKaesten = append(andereKaesten, allKaestenFromUser[i])
+			}
+		}
+	} else {
+		// Split allKaestenFromUser in eigenen und andere kaesten
+		for i := 0; i < len(allKaestenFromUser); i++ {
+			if allKaestenFromUser[i].Kategorie == kategorie {
+				if allKaestenFromUser[i].CreatedByUserID == user.Id {
+					meineKaesten = append(meineKaesten, allKaestenFromUser[i])
+				} else {
+					andereKaesten = append(andereKaesten, allKaestenFromUser[i])
+				}
+			}
 		}
 	}
+
 	var retValue MeineKarteienData
 	retValue.MeineKaesten = meineKaesten
 	retValue.AndereKaesten = andereKaesten
@@ -563,6 +579,7 @@ func GetLernData(_kastenid string, _karteid string, username string) (LernData, 
 		newKastenId, _ = kasten.Add()
 		for i := 0; i < len(decodeKarten); i++ {
 			if decodeKarten[i].KastenID == _kastenid {
+				decodeKarten[i].Fach = "0"
 				decodeKarten[i].KastenID = newKastenId
 				decodeKarten[i].Add()
 			}
@@ -638,6 +655,7 @@ func GetLernData(_kastenid string, _karteid string, username string) (LernData, 
 				zufallsFach := getZufallsFach()
 				for i := 0; i < len(returnKarten); i++ {
 					if returnKarten[i].Fach == strconv.Itoa(zufallsFach) && returnKarten[i].Id != _karteid {
+						decodeKarten[i].Fach = "0"
 						retKarte = returnKarten[i]
 						karteGefunden = true
 					}
@@ -763,12 +781,21 @@ func GetLern2Data(kastenid string, karteid string, username string) (LernData, e
 }
 
 // GetEditData ...
-func GetEditData(username string) (EditData, error) {
+func GetEditData(username string, kastenid string) (EditData, error) {
 	editData := EditData{}
 	user, err := GetUserByUsername(username)
 	if err != nil {
 		return EditData{}, err
 	}
+
+	kasten, err := GetKastenById(kastenid)
+	if err != nil {
+		return EditData{}, err
+	}
+
+	editData.Titel = kasten.Titel
+	editData.Kategorie = kasten.Kategorie
+	editData.Beschreibung = kasten.Beschreibung
 	editData.Image = user.Image
 	return editData, nil
 }

@@ -148,7 +148,7 @@
           <form class="editInputFields">
             <!-- Titel Kasten -->
             <p>Titel</p>
-            <input type="text" size="50" id="editKastenTitel"/>
+            <input type="text" size="50" id="editKastenTitel" value="{{.Titel}}"/>
             <p></p>
             <!-- Optgroup Kategorie Kasten -->
             <p>Kategorie</p>
@@ -213,7 +213,7 @@
               rows="10"
               cols=""
               id="editKastenBeschreibung"
-            ></textarea>
+            >{{.Beschreibung}}</textarea>
             <p></p>
             <!-- Radio button Öffentlich/Privat -->
             <p>Sichtbarkeit</p>

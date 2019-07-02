@@ -1,5 +1,14 @@
 "use strict";
 
+document
+  .getElementById("karteikastenInputSelect")
+  .addEventListener("change", selectListener);
+
+function selectListener() {
+  let kategorie = this.value;
+  window.location.href = `http://localhost:8080/meinekarteien?_kategorie=${kategorie}`;
+}
+
 let deleteButtons = document.getElementsByClassName("kastenDeleteButton");
 for (let i = 0; i < deleteButtons.length; i++) {
   deleteButtons[i].addEventListener("click", deleteKasten);

@@ -1,13 +1,13 @@
 "use strict";
 
 // MDE EDITOR
-let simplemde = new SimpleMDE({
-  element: document.getElementById("edit2Textarea1")
-});
+// let simplemde = new SimpleMDE({
+//   element: document.getElementById("edit2Textarea1")
+// });
 
-let simplemde2 = new SimpleMDE({
-  element: document.getElementById("edit2Textarea2")
-});
+// let simplemde2 = new SimpleMDE({
+//   element: document.getElementById("edit2Textarea2")
+// });
 
 // Get kastenid from url
 let urlParam = function(name, w) {
@@ -32,8 +32,13 @@ document.getElementById("saveButton").addEventListener("click", saveKarte);
 function saveKarte() {
   // Get values from single card forms
   let titel = document.getElementById("edit2input").value;
-  let frage = simplemde.value();
-  let antwort = simplemde2.value();
+  // Für MDE
+  //let frage = simplemde.value();
+  //let antwort = simplemde2.value();
+
+  let frage = document.getElementById("edit2Textarea1").value;
+  let antwort = document.getElementById("edit2Textarea2").value;
+
   // Prepare http post request
   let xhr = new XMLHttpRequest();
   let url = `http://localhost:8080/add-or-update-karte`;
