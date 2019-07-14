@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	server := http.Server{Addr: ":8080"}
+	server := http.Server{Addr: ":80"}
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", controller.Index)
