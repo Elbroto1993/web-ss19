@@ -1,6 +1,6 @@
-# TODOS -- Get things done
+﻿# Flashcard-App
 
-A simple web-based todo list application
+Website to learn with flashcards, based on the Spaced-Repition-System
 
 ## Getting Started
 
@@ -18,25 +18,16 @@ Go version 1.9 or above
 
 Follow these steps:
 
-1. Create the following folder structure in your Go source folder ($GOPATH/src)
-
-```‚
-$GOPATH/src/web-ss19/todo-01
-```
-
-2. Copy the provided sources to the above directory
-
-
-3. Enter the application's source directory
+Enter the application's source directory
 
 ```
-cd $GOPATH/src/web-ss19/todo-01
+cd $GOPATH/src/flashcard-app
 ```
 
 4. Start the server
 
 ```
-go run todoServer.go
+go run main.go
 ```
 
 5. Access the web application using your browser: [http://localhost:8080/](http://localhost:8080/)
@@ -44,10 +35,11 @@ go run todoServer.go
 ## Built With
 
 * [Go](https://www.golang.org/) - The Go Programming Language
+* [Bulma](https://bulma.io/) - CSS Framework
 
 ## Author
 
-* **Luigi Lo Iacono**
+* **Marcel Blesing**
 
 ## License
 
